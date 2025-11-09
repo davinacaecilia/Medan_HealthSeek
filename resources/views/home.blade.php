@@ -31,11 +31,11 @@
 
                 <!-- Baris pencarian -->
                 <form method="GET" action="{{ route('home') }}" class="search-box">
-                <div class="searching"> 
+                <div class="searching">
                     <input type="text" id="search" name="search" placeholder="Masukkan nama rumah sakit..." value="{{ $keyword ?? '' }}">
-                    <button type="submit">Cari</button> 
+                    <button type="submit">Cari</button>
                 </div>
-                
+
                 <!-- FILTER BAR -->
                 <div class="filter-row">
                     <select name="tipe">
@@ -106,9 +106,15 @@
             @forelse ($limitedRS as $rs)
                 <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="card-link">
                     <div class="card">
-                        <span class="tipe-rs tipe-{{ strtolower($rs['tipe'] ?? 'a') }}">{{ $rs['tipe'] ?? 'A' }}</span>
+
+                    <!-- Gambar Rumah Sakit -->
+                    <div class="card-image">
+                        <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
+                    </div>
+
                         <div class="card-header">
                             <h2>{{ $rs['nama'] }}</h2>
+                            <span class="tipe-rs tipe-{{ strtolower($rs['tipe'] ?? 'a') }}">{{ $rs['tipe'] ?? 'A' }}</span>
                         </div>
                         <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
                         <p><strong>No. Handphone:</strong> {{ $rs['No Handphone'] }}</p>
@@ -123,7 +129,7 @@
 
         @if (count($rumahSakit) >= 1)
             <div class="see-more">
-                <a href="/rumah-sakit" class="btn-see-more">See More →</a>
+                <a href="{{ route('pencarian') }}" class="btn-see-more">See More →</a>
             </div>
         @endif
     </main>
