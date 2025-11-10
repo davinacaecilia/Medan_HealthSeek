@@ -26,7 +26,7 @@ body {
   color: var(--light);
   text-align: center;
   overflow: visible;
-  z-index: 5; /* penting */
+  z-index: 5;
 }
 
 
@@ -74,7 +74,7 @@ body {
 .nav-form,
 .btn-beranda {
   position: relative;
-  z-index: 10; /* di atas floating icon */
+  z-index: 10;
 }
 
 /* Search dan Filter Navbar */
@@ -111,8 +111,8 @@ body {
 .nav-form select {
   padding: 0.55rem 0.9rem;
   border-radius: 8px;
-  border: 2px solid #e0e0e0;/* pinggiran abu lebih tua */
-  background-color: #f8f8f8; /* dalamnya abu putih muda */
+  border: 2px solid #e0e0e0;
+  background-color: #f8f8f8;
   color: var(--dark);
   font-size: 0.9rem;
   font-family: "Poppins", sans-serif;
@@ -127,7 +127,7 @@ body {
 
 .nav-form select:focus {
   border-color: var(--primary);
-  background-color: #ffffff; /* sedikit lebih cerah saat fokus */
+  background-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(180, 180, 180, 0.3);
   outline: none;
 }
@@ -198,7 +198,7 @@ body {
     align-items: stretch;
 }
 
-/* Card tetap ukuran sama, tidak melebar */
+/* Card */
 .card {
     background: white;
     border-radius: 10px;
@@ -217,7 +217,7 @@ body {
 .card-header {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between; /* Nama kiri, tipe kanan */
+  justify-content: space-between;
   margin-bottom: 0.5rem;
 }
 
@@ -225,21 +225,20 @@ body {
   color: var(--primary);
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0; /* hapus jarak bawaan */
+  margin: 0;
   letter-spacing: 0.3px;
 }
-
 
 .card p {
   color: #555;
   line-height: 1.1;
-  margin-top: 0; /* ✨ hapus jarak atas bawaan paragraf */
+  margin-top: 0;
   margin-bottom: 0.3rem;
 }
 
 .tipe {
    position: relative;
-  top: -4px;   /* naik dikit ke atas */
+  top: -4px;
   right: -4px;
   display: flex;
   align-items: center;
@@ -272,7 +271,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-
+/* footer */
 footer {
   background: var(--primary);
   color: var(--light);
@@ -302,8 +301,8 @@ footer {
   height: 100%;
   top: 0;
   left: 0;
-  pointer-events: none; /* Biar tidak ganggu klik */
-  z-index: 0; /* Biar tetap DI BELAKANG */
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Icon umum */
@@ -313,11 +312,9 @@ footer {
   filter: none !important;
   position: absolute;
   font-size: 1.8rem;
-  opacity: 0.25; /* Biar samar aesthetic */
+  opacity: 0.25;
   animation: floatIcon 5s ease-in-out infinite;
 }
-
-/* POSISI LEBIH LEBAR & SESUAI YG KAMU MINTA */
 
 /* kiri dekat search */
 .floating-icons .icon:nth-child(1) {
@@ -369,7 +366,60 @@ footer {
 
 .card-image img {
     width: 100%;
-    height: 140px; /* bisa kamu sesuaikan */
+    height: 140px;
     object-fit: cover;
     border-radius: 10px;
+}
+
+/* pagination */
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 25px 0;
+    margin-top: 110px;
+}
+
+#pageNumbers {
+    display: flex;
+    gap: 8px;
+}
+
+.page-btn {
+    border: 1px solid #7fb77e;
+    padding: 6px 12px;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.page-btn:hover {
+    background: #7fb77e;
+    color: white;
+}
+
+.active-page {
+    background: #7fb77e;
+    color: white;
+    font-weight: bold;
+}
+
+#prevBtn, #nextBtn {
+    padding: 7px 14px;
+    border-radius: 5px;
+    background: white;
+    border: 1px solid #7fb77e;
+    color: #7fb77e;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#prevBtn:hover, #nextBtn:hover {
+     background: #7fb77e;
+    color: white;
 }
