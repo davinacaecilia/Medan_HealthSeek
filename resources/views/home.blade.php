@@ -37,66 +37,46 @@
                 </div>
 
                 <!-- FILTER BAR -->
-                <div class="filter-row">
+                <!-- <div class="filter-row">
                     <select name="tipe">
                         <option value="">Tipe RS</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
+                        <option value="A">Tipe A</option>
+                        <option value="B">Tipe B</option>
+                        <option value="C">Tipe C</option>
+                        <option value="D">Tipe D</option>
                     </select>
 
-                    <select name="asuransi">
+                    <select id="asuransi" name="asuransi">
                         <option value="">Asuransi</option>
-                        <option>BPJS Kesehatan</option>
-                        <option>AIA Finance</option>
-                        <option>Allianz</option>
-                        <option>AXA Mandiri</option>
-                        <option>BNI Life</option>
-                        <option>Chubb Life</option>
-                        <option>Great Eastern Life</option>
-                        <option>Manulife</option>
-                        <option>Prudential</option>
-                        <option>Sinarmas MSIG Life</option>
+                        @foreach($asuransiList as $item)
+                            <option value="{{ $item['id_short']['value'] }}">
+                                {{ $item['label']['value'] }}
+                            </option>
+                        @endforeach
                     </select>
 
-                    <select name="kecamatan">
+                    <select id="kecamatan" name="kecamatan">
                         <option value="">Kecamatan</option>
-                        <option>Medan Petisah</option>
-                        <option>Medan Baru</option>
-                        <option>Medan Sunggal</option>
-                        <option>Medan Timur</option>
-                        <option>Medan Selayang</option>
-                        <option>Medan Johor</option>
-                        <option>Medan Denai</option>
-                        <option>Medan Tembung</option>
-                        <option>Medan Maimun</option>
+                        @foreach($kecamatanList as $item)
+                            <option value="{{ $item['id_short']['value'] }}">
+                                {{ $item['label']['value'] }}
+                            </option>
+                        @endforeach
                     </select>
 
-                    <select name="spesialis">
-                        <option value="">Spesialis</option>
-                        <option>Anak</option>
-                        <option>Bedah Umum</option>
-                        <option>Gigi dan Mulut</option>
-                        <option>Ginjal dan Hipertensi</option>
-                        <option>Jantung</option>
-                        <option>Kandungan dan Ginekologi</option>
-                        <option>Kulit dan Kelamin</option>
-                        <option>Mata</option>
-                        <option>Onkologi</option>
-                        <option>Ortopedi</option>
-                        <option>Penyakit Dalam</option>
-                        <option>Saraf</option>
-                        <option>THT</option>
-                        <option>Psikiatri</option>
-                        <option>Urologi</option>
+                    <select id="spesialisasi" name="spesialisasi">
+                        <option value="">Spesialisasi</option>
+                        @foreach($spesialisasiList as $item)
+                            <option value="{{ $item['id_short']['value'] }}">
+                                {{ $item['label']['value'] }}
+                            </option>
+                        @endforeach
                     </select>
-                </div>
+                </div> -->
             </form>
         </div>
     </header>
 
-    <!-- ===== MAIN CONTENT ===== -->
     <main>
         <div class="card-container">
             @php
