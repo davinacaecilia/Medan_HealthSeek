@@ -4,121 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pencarian - Medan HealthSeek</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ asset('css/pencarian.css') }}">
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar">
+    @include('partial.navbar')
 
-    <div class="floating-icons">
-            <span class="icon">💊</span>
-            <span class="icon">🩺</span>
-            <span class="icon">💉</span>
-            <span class="icon">🏥</span>
-        </div>
+    <!-- Konten Utama -->
+    <div class="main-content">
+        <!-- Sidebar kiri: Filter -->
+        <div class="filter-card">
+            <form method="GET" action="{{ route('pencarian') }}">
+            <input type="text" name="search" placeholder="Cari rumah sakit..." class="filter-search">
 
-        <form class="nav-form" method="GET" action="{{ route('pencarian') }}">
-            <input type="text" name="search" placeholder="Cari rumah sakit..." class="search-input">
-
-             <button type="submit" class="btn-cari">Cari</button>
-
-            <select name="tipe">
-                <option value="">Tipe RS</option>
+            <label for="tipe">Tipe Rumah Sakit</label>
+            <select id="tipe" name="tipe">
+                <option value="">Pilih Tipe</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
                 <option value="D">D</option>
             </select>
 
-            <select name="asuransi">
-                <option value="">Asuransi</option>
+            <label for="asuransi">Asuransi</label>
+            <select id="asuransi" name="asuransi">
+                <option value="">Pilih Asuransi</option>
                 <option>BPJS</option>
                 <option>Prudential</option>
                 <option>Mandiri</option>
                 <option>Allianz</option>
             </select>
 
-            <select name="kecamatan">
-                <option value="">Kecamatan</option>
+            <label for="kecamatan">Kecamatan</label>
+            <select id="kecamatan" name="kecamatan">
+                <option value="">Pilih Kecamatan</option>
                 <option>Medan Petisah</option>
                 <option>Medan Baru</option>
                 <option>Medan Johor</option>
                 <option>Medan Timur</option>
             </select>
 
-            <select name="spesialis">
-                <option value="">Spesialis</option>
+            <label for="spesialis">Spesialis</label>
+            <select id="spesialis" name="spesialis">
+                <option value="">Pilih Spesialis</option>
                 <option>Anak</option>
                 <option>Bedah</option>
                 <option>Jantung</option>
                 <option>Mata</option>
                 <option>Umum</option>
             </select>
+
+            <label for="urutkan">Urutkan Berdasarkan</label>
+            <select id="urutkan" name="urutkan">
+                <option value="">Pilih Urutan</option>
+                <option value="nama">Nama</option>
+                <option value="tipe">Tipe</option>
+            </select>
+
+            <button type="submit" class="btn-filter-cari">Cari</button>
         </form>
-
-         <a href="{{ route('home') }}" class="btn-beranda">Beranda</a>
-
-    </nav>
-
-
-    <!-- Card -->
-    <main class="card-container" id="cardContainer">
-    @php
-        // Data dummy contoh (bisa nanti diganti dari database)
-        $rumahSakit = [
-            ['nama' => 'RSU Medan Sehat', 'tipe' => 'A', 'alamat' => 'Jl. Sisingamangaraja No.45', 'no_hp' => '0812-3456-7890'],
-            ['nama' => 'RS Harapan Sehat', 'tipe' => 'B', 'alamat' => 'Jl. Gatot Subroto No.12', 'no_hp' => '0813-2222-8888'],
-            ['nama' => 'RS Kasih Ibu', 'tipe' => 'C', 'alamat' => 'Jl. Iskandar Muda No.77', 'no_hp' => '0811-9999-5555'],
-            ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Setia Budi No.33', 'no_hp' => '0813-1111-2222'],
-        ];
-
-        // Misal nanti kamu ambil dari database, pastikan hasil query dimasukkan ke variabel ini
-        $filtered = collect($rumahSakit)->filter(function($rs) {
-            return request('search')
-                ? str_contains(strtolower($rs['nama']), strtolower(request('search')))
-                : true;
-        });
-    @endphp
-
-    @if ($filtered->isEmpty())
-        <div class="not-found">
-            <p>Rumah sakit yang kamu cari tidak ditemukan.</p>
         </div>
-    @else
-        @foreach ($filtered as $rs)
-            <div class="card">
 
-            <div class="card-image">
-                <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
+        <!-- Kanan: Card hasil pencarian -->
+        <main class="card-container" id="cardContainer">
+        @php
+            $rumahSakit = [
+                ['nama' => 'Rumah Sakit Umum Medan Sehat', 'tipe' => 'A', 'alamat' => 'Jl. Sisingamangaraja No.45', 'no_hp' => '0812-3456-7890'],
+                ['nama' => 'RS Harapan Sehat', 'tipe' => 'B', 'alamat' => 'Jl. Gatot Subroto No.12', 'no_hp' => '0813-2222-8888'],
+                ['nama' => 'RS Kasih Ibu', 'tipe' => 'C', 'alamat' => 'Jl. Iskandar Muda No.77', 'no_hp' => '0811-9999-5555'],
+                ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Ayahanda No.68A, Medan Petisah, Medan',
+                        'No Handphone', 'no_hp' => '0813-1111-2222'],
+                ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Setia Budi No.33', 'no_hp' => '0813-1111-2222'],
+                ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Setia Budi No.33', 'no_hp' => '0813-1111-2222'],
+                ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Setia Budi No.33', 'no_hp' => '0813-1111-2222'],
+            ];
+
+            $filtered = collect($rumahSakit)->filter(function($rs) {
+                return request('search')
+                    ? str_contains(strtolower($rs['nama']), strtolower(request('search')))
+                    : true;
+            });
+        @endphp
+
+        @if ($filtered->isEmpty())
+            <div class="not-found">
+                <p>Rumah sakit yang kamu cari tidak ditemukan.</p>
             </div>
+        @else
+            @foreach ($filtered as $rs)
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
+                    </div>
 
-                <div class="card-header">
-                    <h2>{{ $rs['nama'] }}</h2>
-                    <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+                    <div class="card-header">
+                        <h2>{{ $rs['nama'] }}</h2>
+                        <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+                    </div>
+
+                    <div class="card-location">
+                        <i class='bx bx-map'></i>
+                        <span>{{ $rs['alamat'] }}</span>
+                    </div>
+
+                    <!-- Tombol detail -->
+                    <div class="card-footer">
+                        <a href="#" class="btn-detail">Detail</a>
+                    </div>
                 </div>
-                <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
-                <p><strong>No. HP:</strong> {{ $rs['no_hp'] }}</p>
-            </div>
-        @endforeach
-    @endif
-</main>
+            @endforeach
+        @endif
+        </main>
+    </div>
 
-<!--pagination-->
-<div class="pagination">
-    <button id="prevBtn">Previous</button>
-    <div id="pageNumbers"></div>
-    <button id="nextBtn">Next</button>
-</div>
+    <!-- Pagination -->
+    <div class="pagination">
+        <button id="prevBtn">Previous</button>
+        <div id="pageNumbers"></div>
+        <button id="nextBtn">Next</button>
+    </div>
 
-<!-- footer -->
+    <!-- Footer -->
     <footer>
         <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
     </footer>
 
 <script>
     const cards = Array.from(document.querySelectorAll('.card'));
-    const cardsPerPage = 2;
+    const cardsPerPage = 4;
     let currentPage = 1;
 
     function showPage(page) {
@@ -138,19 +153,8 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // di halaman pertama → hide previous
-        if (currentPage === 1) {
-            prevBtn.style.visibility = "hidden";
-        } else {
-            prevBtn.style.visibility = "visible";
-        }
-
-        // di halaman terakhir → hide next
-        if (currentPage === totalPages) {
-            nextBtn.style.visibility = "hidden";
-        } else {
-            nextBtn.style.visibility = "visible";
-        }
+        prevBtn.style.visibility = (currentPage === 1) ? "hidden" : "visible";
+        nextBtn.style.visibility = (currentPage === totalPages) ? "hidden" : "visible";
     }
 
     function updatePageNumbers() {
@@ -162,16 +166,12 @@
             const btn = document.createElement("button");
             btn.textContent = i;
             btn.classList.add("page-btn");
-
-            if (i === currentPage) {
-                btn.classList.add("active-page");
-            }
+            if (i === currentPage) btn.classList.add("active-page");
 
             btn.addEventListener("click", () => {
                 currentPage = i;
                 showPage(currentPage);
             });
-
             pageNumbersContainer.appendChild(btn);
         }
     }

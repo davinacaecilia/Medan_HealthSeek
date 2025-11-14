@@ -16,7 +16,7 @@ class RumahSakitController extends Controller
                 'alamat' => 'Jl. Ayahanda No.68A, Medan Petisah, Medan',
                 'tipe' => 'B',
                 'No Handphone' => '0016256',
-                
+
             ],
             [
                 'id' => 2,
