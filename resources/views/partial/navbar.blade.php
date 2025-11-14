@@ -1,6 +1,6 @@
 <nav class="navbar">
     <div class="logo">
-        <img src="{{ asset('logo.png') }}" alt="Medan HealthSeek Logo">
+        <img src="{{ asset('logoo.png') }}" alt="Medan HealthSeek Logo">
     </div>
 
     <div class="floating-icons">
@@ -44,8 +44,9 @@
 
 /* Logo Tengah */
 .logo img {
-  height: 50px;
+  height: 80px;
   margin-left: 20px;
+  margin-top: 10px;
 }
 
 /* Floating Icons */
@@ -66,7 +67,7 @@
   animation: floatIcon 5s ease-in-out infinite;
 }
 
-.floating-icons .icon:nth-child(1) { top: 25%; left: 10%; animation-duration: 4.7s; }
+.floating-icons .icon:nth-child(1) { top: 25%; left: 15%; animation-duration: 4.7s; }
 .floating-icons .icon:nth-child(2) { top: 35%; left: 40%; animation-duration: 5.2s; }
 .floating-icons .icon:nth-child(3) { top: 28%; right: 30%; animation-duration: 5.5s; }
 .floating-icons .icon:nth-child(4) { top: 11%; right: 10%; animation-duration: 4.9s; }
