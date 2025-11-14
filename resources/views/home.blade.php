@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medan HealthSeek</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 </head>
 <body>
@@ -97,42 +98,43 @@
     </header>
 
     <!-- ===== MAIN CONTENT ===== -->
-    <main>
-        <div class="card-container">
-            @php
-                $limitedRS = array_slice($rumahSakit, 0, 3);
-            @endphp
+<main class="card-container">
+        @php
+            $limitedRS = array_slice($rumahSakit, 0, 3);
+        @endphp
 
-            @forelse ($limitedRS as $rs)
-                <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="card-link">
-                    <div class="card">
-
-                    <!-- Gambar Rumah Sakit -->
-                    <div class="card-image">
-                        <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
-                    </div>
-
-                        <div class="card-header">
-                            <h2>{{ $rs['nama'] }}</h2>
-                            <span class="tipe-rs tipe-{{ strtolower($rs['tipe'] ?? 'a') }}">{{ $rs['tipe'] ?? 'A' }}</span>
-                        </div>
-                        <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
-                        <p><strong>No. Handphone:</strong> {{ $rs['No Handphone'] }}</p>
-                    </div>
-                </a>
-            @empty
-                <div class="not-found">
-                    <p>Tidak ada data rumah sakit ditemukan.</p>
+        @forelse ($limitedRS as $rs)
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
                 </div>
-            @endforelse
-        </div>
+
+                <div class="card-header">
+                    <h2>{{ $rs['nama'] }}</h2>
+                    <span class="tipe tipe-{{ strtolower($rs['tipe'] ?? 'a') }}">{{ $rs['tipe'] ?? 'A' }}</span>
+                </div>
+
+                <div class="card-location">
+                    <i class='bx bx-map'></i>
+                    <span>{{ $rs['alamat'] }}</span>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="btn-detail">Detail</a>
+                </div>
+            </div>
+        @empty
+            <div class="not-found">
+                <p>Tidak ada data rumah sakit ditemukan.</p>
+            </div>
+        @endforelse
+    </main>
 
         @if (count($rumahSakit) >= 1)
             <div class="see-more">
                 <a href="{{ route('pencarian') }}" class="btn-see-more">See More →</a>
             </div>
         @endif
-    </main>
 
     <footer>
         <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
