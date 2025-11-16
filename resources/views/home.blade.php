@@ -105,9 +105,6 @@
 
         @forelse ($limitedRS as $rs)
             <div class="card">
-                <div class="card-image">
-                    <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
-                </div>
 
                 <div class="card-header">
                     <h2>{{ $rs['nama'] }}</h2>
@@ -119,8 +116,13 @@
                     <span>{{ $rs['alamat'] }}</span>
                 </div>
 
-                <div class="card-footer">
-                    <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="btn-detail">Detail</a>
+                <div class="card-phone">
+                    <i class='bx bx-phone'></i>
+                    <span>{{ $rs['No Handphone'] }}</span>
+                </div>
+
+                <div class="card-footer-center">
+                    <a href="#" class="btn-detail">Detail</a>
                 </div>
             </div>
         @empty

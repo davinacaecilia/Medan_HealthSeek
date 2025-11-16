@@ -47,6 +47,7 @@
   height: 80px;
   margin-left: 20px;
   margin-top: 10px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 /* Floating Icons */
