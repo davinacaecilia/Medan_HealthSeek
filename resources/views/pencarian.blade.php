@@ -56,6 +56,20 @@
                 <option>Umum</option>
             </select>
 
+            <label for="kab_kota">Kabupaten / Kota</label>
+            <select id="kab_kota" name="kab_kota">
+                <option value="">Pilih Kabupaten / Kota</option>
+                <option>Kota Medan</option>
+                <option>Kota Binjai</option>
+                <option>Kota Tebing Tinggi</option>
+                <option>Kota Pematangsiantar</option>
+                <option>Kabupaten Deli Serdang</option>
+                <option>Kabupaten Serdang Bedagai</option>
+                <option>Kabupaten Langkat</option>
+                <option>Kabupaten Karo</option>
+            </select>
+
+
             <label for="urutkan">Urutkan Berdasarkan</label>
             <select id="urutkan" name="urutkan">
                 <option value="">Pilih Urutan</option>
@@ -94,27 +108,31 @@
             </div>
         @else
             @foreach ($filtered as $rs)
-                <div class="card">
-                    <div class="card-image">
-                        <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
-                    </div>
+    <div class="card">
 
-                    <div class="card-header">
-                        <h2>{{ $rs['nama'] }}</h2>
-                        <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
-                    </div>
+        <div class="card-header">
+            <h2>{{ $rs['nama'] }}</h2>
+            <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+        </div>
 
-                    <div class="card-location">
-                        <i class='bx bx-map'></i>
-                        <span>{{ $rs['alamat'] }}</span>
-                    </div>
+        <div class="card-location">
+            <i class='bx bx-map'></i>
+            <span>{{ $rs['alamat'] }}</span>
+        </div>
 
-                    <!-- Tombol detail -->
-                    <div class="card-footer">
-                        <a href="#" class="btn-detail">Detail</a>
-                    </div>
-                </div>
-            @endforeach
+        <!-- TELEPON -->
+        <div class="card-phone">
+            <i class='bx bx-phone'></i>
+            <span>{{ $rs['no_hp'] }}</span>
+        </div>
+
+        <!-- Tombol detail (tengah) -->
+        <div class="card-footer-center">
+            <a href="#" class="btn-detail">Detail</a>
+        </div>
+    </div>
+@endforeach
+
         @endif
         </main>
     </div>
