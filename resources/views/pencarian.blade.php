@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
 
     <div class="floating-icons">
@@ -62,18 +61,36 @@
     </nav>
 
 
-    <!-- Card -->
     <main class="card-container" id="cardContainer">
     @php
-        // Data dummy contoh (bisa nanti diganti dari database)
+        // ==========================================================
+        // PERUBAHAN DI SINI: Data dummy ini disamakan dengan Controller
+        // ==========================================================
         $rumahSakit = [
-            ['nama' => 'RSU Medan Sehat', 'tipe' => 'A', 'alamat' => 'Jl. Sisingamangaraja No.45', 'no_hp' => '0812-3456-7890'],
-            ['nama' => 'RS Harapan Sehat', 'tipe' => 'B', 'alamat' => 'Jl. Gatot Subroto No.12', 'no_hp' => '0813-2222-8888'],
-            ['nama' => 'RS Kasih Ibu', 'tipe' => 'C', 'alamat' => 'Jl. Iskandar Muda No.77', 'no_hp' => '0811-9999-5555'],
-            ['nama' => 'RS Mitra Medika', 'tipe' => 'D', 'alamat' => 'Jl. Setia Budi No.33', 'no_hp' => '0813-1111-2222'],
+            [
+                'id' => 1,
+                'nama' => 'RSU Royal Prima',
+                'alamat' => 'Jl. Ayahanda No. 68, ...',
+                'no_hp' => '0812-3456-7890',
+                'tipe' => 'A'
+            ],
+            [
+                'id' => 2,
+                'nama' => 'RS Columbia Asia Medan',
+                'alamat' => 'Jl. Listrik No. 2, ...',
+                'no_hp' => '4566 368',
+                'tipe' => 'B'
+            ],
+            [
+                'id' => 3,
+                'nama' => 'RS Hermina Medan',
+                'alamat' => 'Jl. Asrama No. 34, ...',
+                'no_hp' => '80862525',
+                'tipe' => 'C'
+            ],
         ];
 
-        // Misal nanti kamu ambil dari database, pastikan hasil query dimasukkan ke variabel ini
+        // Filter ini akan memfilter $rumahSakit yang dikirim dari Controller
         $filtered = collect($rumahSakit)->filter(function($rs) {
             return request('search')
                 ? str_contains(strtolower($rs['nama']), strtolower(request('search')))
@@ -87,37 +104,38 @@
         </div>
     @else
         @foreach ($filtered as $rs)
-            <div class="card">
+            <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="card-link">
+                <div class="card">
 
-            <div class="card-image">
-                <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
-            </div>
-
-                <div class="card-header">
-                    <h2>{{ $rs['nama'] }}</h2>
-                    <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+                <div class="card-image">
+                    <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
                 </div>
-                <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
-                <p><strong>No. HP:</strong> {{ $rs['no_hp'] }}</p>
-            </div>
+
+                    <div class="card-header">
+                        <h2>{{ $rs['nama'] }}</h2>
+                        <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+                    </div>
+                    <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
+                    <p><strong>No. HP:</strong> {{ $rs['no_hp'] }}</p>
+                </div>
+            </a>
         @endforeach
     @endif
 </main>
 
-<!--pagination-->
 <div class="pagination">
     <button id="prevBtn">Previous</button>
     <div id="pageNumbers"></div>
     <button id="nextBtn">Next</button>
 </div>
 
-<!-- footer -->
-    <footer>
-        <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
+<footer>
+        <p>© {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
     </footer>
 
 <script>
-    const cards = Array.from(document.querySelectorAll('.card'));
+    // Script pagination ini sudah benar, tidak perlu diubah
+    const cardLinks = Array.from(document.querySelectorAll('.card-link'));
     const cardsPerPage = 2;
     let currentPage = 1;
 
@@ -125,8 +143,8 @@
         const start = (page - 1) * cardsPerPage;
         const end = start + cardsPerPage;
 
-        cards.forEach((card, index) => {
-            card.style.display = (index >= start && index < end) ? 'block' : 'none';
+        cardLinks.forEach((cardLink, index) => {
+            cardLink.style.display = (index >= start && index < end) ? 'block' : 'none';
         });
 
         updatePageNumbers();
@@ -134,18 +152,16 @@
     }
 
     function updateButtons() {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // di halaman pertama → hide previous
         if (currentPage === 1) {
             prevBtn.style.visibility = "hidden";
         } else {
             prevBtn.style.visibility = "visible";
         }
 
-        // di halaman terakhir → hide next
         if (currentPage === totalPages) {
             nextBtn.style.visibility = "hidden";
         } else {
@@ -154,7 +170,7 @@
     }
 
     function updatePageNumbers() {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         const pageNumbersContainer = document.getElementById('pageNumbers');
         pageNumbersContainer.innerHTML = "";
 
@@ -177,7 +193,7 @@
     }
 
     document.getElementById('nextBtn').addEventListener('click', () => {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         if (currentPage < totalPages) {
             currentPage++;
             showPage(currentPage);
