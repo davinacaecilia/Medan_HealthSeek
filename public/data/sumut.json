@@ -1,0 +1,196 @@
+{
+  "Kabupaten Asahan": [
+    "Air Batu", "Air Joman", "Aek Ledong", "Aek Kuasan", "Aek Songsongan",
+    "Bandar Pasir Mandoge", "Bandar Pulau", "Buntu Pane", "Kisaran Barat",
+    "Kisaran Timur", "Meranti", "Pulau Rakyat", "Rawang Panca Arga",
+    "Sei Dadap", "Setia Janji", "Silau Laut", "Simpang Empat", "Tanjung Balai"
+  ],
+
+  "Kabupaten Batubara": [
+    "Air Putih", "Laut Tador", "Lima Puluh", "Lima Puluh Pesisir",
+    "Medang Deras", "Namasal", "Sei Balai", "Talawi", "Tanjung Tiram"
+  ],
+
+  "Kabupaten Deli Serdang": [
+    "Pancur Batu", "Sunggal", "Deli Tua", "Patumbak", "Lubuk Pakam",
+    "Batang Kuis", "Biru-biru", "Beringin", "Galang", "Hamparan Perak",
+    "Kutalimbaru", "Labuhan Deli", "Namo Rambe", "Pagar Merbau",
+    "Pantai Labu", "Percut Sei Tuan", "STM Hilir", "Sinembah Tanjung Muda Hulu",
+    "Tanjung Morawa"
+  ],
+
+  "Kabupaten Humbang Hasundutan": [
+    "Bakti Raja", "Dolok Sanggul", "Lintong Nihuta", "Onan Ganjang",
+    "Pakkat", "Paranginan", "Parlilitan", "Pollung", "Sijama Polang",
+    "Tarabintang"
+  ],
+
+  "Kabupaten Karo": [
+    "Barusjahe", "Berastagi", "Dolat Rayat", "Juhar", "Kabanjahe",
+    "Kutabuluh", "Laubaleng", "Mardingding", "Merdeka", "Munte",
+    "Naman Teran", "Payung", "Simpang Empat", "Tigabinanga", "Tiganderket",
+    "Tiga Panah"
+  ],
+
+  "Kabupaten Labuhanbatu": [
+    "Bilah Barat", "Bilah Hilir", "Bilah Hulu", "Panai Hilir", "Panai Hulu",
+    "Panai Tengah", "Rantau Selatan", "Rantau Utara"
+  ],
+
+  "Kabupaten Labuhanbatu Selatan": [
+    "Kampung Rakyat", "Kota Pinang", "Sei Kanan", "Silangkitang", "Torgamba"
+  ],
+
+  "Kabupaten Labuhanbatu Utara": [
+    "Aek Kuo", "Aek Natas", "Kualuh Hilir", "Kualuh Hulu", "Kualuh Leidong",
+    "Kualuh Selatan", "Marbau", "Na IX-X"
+  ],
+
+  "Kabupaten Langkat": [
+    "Babalan", "Bahorok", "Batang Serangan", "Berandan Barat", "Besitang",
+    "Binjai", "Gebang", "Hinai", "Kuala", "Kutambaru", "Padang Tualang",
+    "Pangkalan Susu", "Pematang Jaya", "Salapian", "Sawit Seberang",
+    "Secanggang", "Sei Bingei", "Sei Lepan", "Selesai", "Sirapit",
+    "Stabat", "Tanjung Pura", "Wampu"
+  ],
+
+  "Kabupaten Mandailing Natal": [
+    "Batahan", "Batang Natal", "Bukit Malintang", "Huta Bargot",
+    "Kotanopan", "Lembah Sorik Marapi", "Lingga Bayu", "Muara Batang Gadis",
+    "Muara Sipongi", "Naga Juang", "Pakuan Batu", "Panyabungan", "Panyabungan Barat",
+    "Panyabungan Selatan", "Panyabungan Timur", "Panyabungan Utara",
+    "Ranto Baek", "Siabu", "Sinunukan", "Tambangan", "Ulu Pungkut"
+  ],
+
+  "Kabupaten Nias": [
+    "Bawolato", "Botomuzoi", "Gido", "Hili Serangkai", "Hiliduho", "Ma'u",
+    "Sogaeadu", "Somolo-molo", "Ulugawo"
+  ],
+
+  "Kabupaten Nias Barat": [
+    "Lahomi", "Lolofitu Moi", "Mandrehe", "Mandrehe Barat", "Mandrehe Utara",
+    "Sirombu", "Ulu Moro'o"
+  ],
+
+  "Kabupaten Nias Selatan": [
+    "Amandraya", "Aramo", "Boronadu", "Fanayama", "Gomo", "Hibala",
+    "Hilimegai", "Lahusa", "Lolomatua", "Lolowau", "Maniamolo", "Mazino",
+    "O'o'u", "Onohazumba", "Pulau-Pulau Batu", "Pulau-Pulau Batu Barat",
+    "Pulau-Pulau Batu Timur", "Pulau-Pulau Batu Utara", "Sidua'ori",
+    "Simuk", "Somambawa", "Tanah Masa", "Teluk Dalam", "Toma", "Ulunoyo",
+    "Ulususua"
+  ],
+
+  "Kabupaten Nias Utara": [
+    "Afulu", "Alasa", "Alasa Talumuzoi", "Lahewa", "Lahewa Timur",
+    "Lotu", "Namohalu Esiwa", "Sawo", "Tugala Oyo"
+  ],
+
+  "Kabupaten Padang Lawas": [
+    "Aek Nabara Barumun", "Barumun", "Barumun Selatan", "Barumun Tengah",
+    "Batang Lubu Sutam", "Huristak", "Hutaraja Tinggi", "Lubuk Barumun",
+    "Sihapas Barumun", "Sosa", "Sosopan", "Ulu Barumun"
+  ],
+
+  "Kabupaten Padang Lawas Utara": [
+    "Batang Onang", "Dolok", "Dolok Sigompulon", "Halongonan", "Halongonan Timur",
+    "Hulu Sihapas", "Padang Bolak", "Padang Bolak Julu", "Padang Bolak Tenggara",
+    "Portibi", "Simangambat"
+  ],
+
+  "Kabupaten Pakpak Bharat": [
+    "Kerajaan", "Pagindar", "Pergetteng Getteng Sengkut", "Salak", "Siempat Rube",
+    "Sitellu Tali Urang Jehe", "Sitellu Tali Urang Julu", "Tinada"
+  ],
+
+  "Kabupaten Samosir": [
+    "Harian", "Nainggolan", "Onan Runggu", "Palipi", "Pangururan",
+    "Ronggur Nihuta", "Sianjur Mula Mula", "Simanindo", "Sitio-tio"
+  ],
+
+  "Kabupaten Serdang Bedagai": [
+    "Bintang Bayu", "Dolok Masihul", "Dolok Merawan", "Kotarih", "Pantai Cermin",
+    "Pegajahan", "Perbaungan", "Sei Bamban", "Sei Rampah", "Silinda",
+    "Sipispis", "Tanjung Beringin", "Tebing Syahbandar", "Tebing Tinggi"
+  ],
+
+  "Kabupaten Simalungun": [
+    "Bandar", "Bandar Huluan", "Bandar Masilam", "Bosar Maligas",
+    "Dolok Batu Nanggar", "Dolok Panribuan", "Dolok Pardamean", "Dolok Silau",
+    "Girsang Sipangan Bolon", "Gunung Malela", "Gunung Maligas", "Hatonduhan",
+    "Huta Bayu Raja", "Jawa Maraja Bah Jambi", "Jorlang Hataran", "Panei",
+    "Panombeian Panei", "Pematang Bandar", "Pematang Raya", "Purba",
+    "Raya Kahean", "Siantar", "Sidamanik", "Silimakuta", "Silou Kahean",
+    "Tanah Jawa", "Tapian Dolok", "Ujung Padang"
+  ],
+
+  "Kabupaten Tapanuli Selatan": [
+    "Aek Bilah", "Angkola Barat", "Angkola Selatan", "Angkola Timur",
+    "Angkola Sangkunur", "Arse", "Batang Angkola", "Batang Toru",
+    "Marancar", "Muara Batang Toru", "Saipar Dolok Hole",
+    "Sayur Matinggi", "Sipirok", "Tano Tombangan Angkola"
+  ],
+
+  "Kabupaten Tapanuli Tengah": [
+    "Andam Dewi", "Badiri", "Barus", "Barus Utara", "Kolong", 
+    "Lumut", "Manduamas", "Pandan", "Pasaribu Tobing",
+    "Pinangsori", "Sarudik", "Sibabangun", "Sirandorung", "Sorkam",
+    "Sorkam Barat", "Sosorgadong", "Tapian Nauli"
+  ],
+
+  "Kabupaten Tapanuli Utara": [
+    "Adian Koting", "Garoga", "Pagaran", "Pahae Jae", "Pahae Julu",
+    "Pangaribuan", "Parmonangan", "Purbatua", "Siatas Barita",
+    "Siborong-Borong", "Simangumban", "Sipahutar", "Sipoholon",
+    "Tarutung"
+  ],
+
+  "Kabupaten Toba": [
+    "Ajibata", "Balige", "Borbor", "Habinsaran", "Laguboti",
+    "Lumban Julu", "Nassau", "Parmaksian", "Pintu Pohan Meranti",
+    "Porsea", "Siantar Narumonda", "Sigumpar", "Silaen", "Tampahan",
+    "Uluan"
+  ],
+
+  "Kota Medan": [
+    "Medan Amplas", "Medan Area", "Medan Barat", "Medan Baru", "Medan Belawan",
+    "Medan Deli", "Medan Denai", "Medan Helvetia", "Medan Johor",
+    "Medan Kota", "Medan Labuhan", "Medan Maimun", "Medan Marelan",
+    "Medan Perjuangan", "Medan Petisah", "Medan Polonia", "Medan Selayang",
+    "Medan Sunggal", "Medan Tembung", "Medan Timur", "Medan Tuntungan"
+  ],
+
+  "Kota Binjai": [
+    "Binjai Barat", "Binjai Kota", "Binjai Selatan", "Binjai Timur",
+    "Binjai Utara"
+  ],
+
+  "Kota Pematang Siantar": [
+    "Siantar Barat", "Siantar Marihat", "Siantar Marimbun", "Siantar Martoba",
+    "Siantar Selatan", "Siantar Sitalasari", "Siantar Timur", "Siantar Utara"
+  ],
+
+  "Kota Sibolga": [
+    "Sibolga Kota", "Sibolga Sambas", "Sibolga Selatan", "Sibolga Aek Habil"
+  ],
+
+  "Kota Tanjung Balai": [
+    "Sei Tualang Raso", "Tanjung Balai Selatan", "Tanjung Balai Utara",
+    "Teluk Nibung"
+  ],
+
+  "Kota Tebing Tinggi": [
+    "Bajenis", "Padang Hilir", "Padang Hulu", "Rambutan", "Tebing Tinggi Kota"
+  ],
+
+  "Kota Padangsidimpuan": [
+    "Padangsidimpuan Angkola Julu", "Padangsidimpuan Batunadua",
+    "Padangsidimpuan Hutaimbaru", "Padangsidimpuan Selatan",
+    "Padangsidimpuan Tenggara", "Padangsidimpuan Utara"
+  ],
+
+  "Kota Gunungsitoli": [
+    "Gunungsitoli", "Gunungsitoli Alo'oa", "Gunungsitoli Barat",
+    "Gunungsitoli Idanoi", "Gunungsitoli Selatan", "Gunungsitoli Utara"
+  ]
+}
