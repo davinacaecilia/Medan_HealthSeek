@@ -1,0 +1,163 @@
+:root {
+  --primary: #7fb77e;
+  --secondary: #f9f9f9;
+  --dark: #1f2937;
+  --light: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --radius: 10px;
+}
+
+/* Navbar */
+.navbar {
+  /* Revisi: Dibuat sticky */
+  position: sticky;
+  top: 0;
+  height: 10vh;
+  background: linear-gradient(135deg, var(--primary), #9cd89c);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  color: var(--light);
+  text-align: center;
+  overflow: visible;
+  z-index: 5;
+}
+
+/* Form di dalam Navbar */
+.nav-form {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.nav-form input,
+.nav-form select {
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid #ddd;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.nav-form input:focus,
+.nav-form select:focus {
+  border-color: var(--primary);
+}
+
+.search-input {
+  width: 220px;
+}
+
+.btn-cari {
+  background: #a8d8a7;
+  color: var(--light);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cari:hover {
+  background: #587e58;
+}
+
+.nav-form,
+.btn-beranda {
+  position: relative;
+  z-index: 10;
+}
+
+.nav-form select {
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background-color: #f8f8f8;
+  color: var(--dark);
+  font-size: 0.9rem;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' class='bi bi-chevron-down' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 0.9rem;
+  min-width: 120px;
+}
+
+.nav-form select:focus {
+  border-color: var(--primary);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(180, 180, 180, 0.3);
+  outline: none;
+}
+
+/* Tombol Beranda / Kembali */
+.btn-beranda {
+  position: absolute;
+  right: 2rem;
+  background: var(--light);
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border: none; 
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-beranda:hover {
+  background: #f1f1f1;
+  transform: translateY(-2px);
+}
+
+.btn-beranda:focus,
+.btn-beranda:active {
+  outline: none;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+  .search-input { width: 100%; }
+  .nav-form { justify-content: center; }
+}
+
+/* Floating Icons di Navbar */
+.floating-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-icons .icon {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  opacity: 1 !important;
+  filter: none !important;
+  position: absolute;
+  font-size: 1.8rem;
+  opacity: 0.25;
+  animation: floatIcon 5s ease-in-out infinite;
+}
+
+.floating-icons .icon:nth-child(1) { top: 25%; left: 8%; animation-duration: 4.7s; }
+.floating-icons .icon:nth-child(2) { top: 35%; left: 34%; animation-duration: 5.2s; }
+.floating-icons .icon:nth-child(3) { top: 28%; right: 26%; animation-duration: 5.5s; }
+.floating-icons .icon:nth-child(4) { top: 11%; right: 12%; animation-duration: 4.9s; }
+
+@keyframes floatIcon {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
