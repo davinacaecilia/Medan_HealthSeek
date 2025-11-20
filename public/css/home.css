@@ -19,6 +19,9 @@ body {
   background: var(--secondary);
   color: var(--dark);
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Hero Section */
@@ -119,26 +122,71 @@ body {
   width: 100%;
 }
 
-/* Filter Bar */
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: space-between;
+/* ================= DROP DOWN BAR ================= */
+
+/* Baris atas: Tipe RS – Asuransi – Spesialis */
+.filter-top {
+    display: flex;
+    flex-wrap: nowrap;       /* ❗supaya tidak turun */
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.filter-row select {
-  flex: 1 1 200px;
-  padding: 0.8rem;
-  border-radius: 10px;
-  border: 2px solid #e0e0e0;
-  background: #f8f8f8;
-  font-size: 0.95rem;
-  transition: border 0.3s ease;
+.filter-top select {
+    flex: 1;                 /* ❗semua ukuran sama */
+    min-width: 0;            /* ❗hindari overflow */
+    padding: 0.8rem;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    background: #f8f8f8;
+    font-size: 0.95rem;
+    transition: border 0.3s ease;
 }
 
-.filter-row select:focus {
-  border-color: var(--primary);
+.filter-top select:focus {
+    border-color: var(--primary);
+}
+
+
+/* Baris bawah: Kabupaten/Kota – Kecamatan */
+.filter-bottom {
+    display: flex;
+    flex-wrap: nowrap;       /* tetap sejajar juga */
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.filter-bottom select {
+    flex: 1;
+    min-width: 0;
+    padding: 0.8rem;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    background: #f8f8f8;
+    font-size: 0.95rem;
+    transition: border 0.3s ease;
+}
+
+.filter-bottom select:focus {
+    border-color: var(--primary);
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .filter-top,
+    .filter-bottom {
+        flex-wrap: wrap;     /* di layar kecil boleh turun */
+        flex-direction: column;
+    }
+
+    .filter-top select,
+    .filter-bottom select {
+        width: 100%;
+    }
 }
 
 /* button cari */
@@ -182,28 +230,39 @@ body {
   }
 }
 
-
 /* Crad Section */
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;        /* supaya turun ke bawah kalau penuh */
+  justify-content: center; /* tengahin semua card */
+  gap: 16px;
   padding: 2rem;
-  max-width: 1100px;
+  max-width: 1200px;       /* biar rapi di tengah */
   margin: auto;
   animation: fadeInUp 1.2s ease forwards;
 }
 
 .card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px var(--shadow);
-  padding: 12px 12px;
-  overflow: hidden;
-  border-radius: 16px;
-  transition: all 0.4s ease;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: relative;
-  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex: 0 1 280px;
+}
+
+.card-header {
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px; /* dirapetin */
+  min-height: 38px;
 }
 
 .card:hover {
@@ -218,9 +277,12 @@ body {
 }
 
 .card-header h2 {
-  font-size: 1.3rem;
-  color: var(--primary);
-  margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary);
+    font-weight: 600;
+    flex: 1;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .card p {
@@ -228,26 +290,94 @@ body {
   line-height: 1.6;
 }
 
-/* Tipe RS */
-.tipe-rs {
-  display: inline-flex;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
-  font-size: 0.9rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  transform: translateX(4px);
+/* CARD IMAGE */
+.card-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px; /* samakan dengan pencarian */
 }
 
-/* Warna tiap tipe RS */
+.card-image img {
+    width: 100%;
+    height: 160px; /* samakan tinggi card pencarian */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Tipe RS */
+.tipe {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: white;
+    margin-left: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
 .tipe-a { background-color: #007bff; }
 .tipe-b { background-color: #28a745; }
 .tipe-c { background-color: #ffc107; color: #000; }
 .tipe-d { background-color: #dc3545; }
+
+/* LOKASI CARD */
+.card-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.card-location i {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.card-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.card-phone i {
+  color: var(--primary);
+  font-size: 1.4rem;
+}
+
+
+/* CARD FOOTER */
+.card-footer-center {
+  margin-top: auto;          /* biar tetap ke bawah */
+  text-align: center;        /* tengah */
+  padding-top: 10px;
+  position: relative;
+}
+
+.btn-detail {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-detail:hover {
+    background: #6ca76d;
+    transform: scale(1.05);
+}
 
 /*see more butten */
 .see-more {
@@ -283,6 +413,10 @@ footer {
   letter-spacing: 0.3px;
   box-shadow: 0 -4px 10px var(--shadow);
   margin-top: 2rem;
+}
+
+main {
+  flex: 1; /* isi konten dorong footer ke bawah */
 }
 
 /* floating Icons */
@@ -370,7 +504,37 @@ footer {
 
 .card-image img {
     width: 100%;
-    height: 140px; /* bisa kamu sesuaikan */
+    height: 140px; 
     object-fit: cover;
     border-radius: 10px;
+}
+/* Posisi logo di kiri atas */
+.logo {
+    position: absolute;
+    top: 20px;          
+    left: 20px;        
+    z-index: 1000;      
+}
+
+.logo img {
+    height: 95px;       
+    width: auto;
+}
+
+/* Posisi nav di kanan atas */
+.nav {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav-link.active {
+    border-bottom: 2px solid #fff;
 }
