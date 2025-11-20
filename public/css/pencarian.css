@@ -284,10 +284,14 @@ footer {
   }
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .filter-card label {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--dark);
   margin-bottom: -4px; /* jarak biar deket dropdown */
 }
-

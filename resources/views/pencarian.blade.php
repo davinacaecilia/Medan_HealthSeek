@@ -115,6 +115,44 @@
             <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
         </div>
 
+
+    <main class="card-container" id="cardContainer">
+    @php
+        // ==========================================================
+        // PERUBAHAN DI SINI: Data dummy ini disamakan dengan Controller
+        // ==========================================================
+        $rumahSakit = [
+            [
+                'id' => 1,
+                'nama' => 'RSU Royal Prima',
+                'alamat' => 'Jl. Ayahanda No. 68, ...',
+                'no_hp' => '0812-3456-7890',
+                'tipe' => 'A'
+            ],
+            [
+                'id' => 2,
+                'nama' => 'RS Columbia Asia Medan',
+                'alamat' => 'Jl. Listrik No. 2, ...',
+                'no_hp' => '4566 368',
+                'tipe' => 'B'
+            ],
+            [
+                'id' => 3,
+                'nama' => 'RS Hermina Medan',
+                'alamat' => 'Jl. Asrama No. 34, ...',
+                'no_hp' => '80862525',
+                'tipe' => 'C'
+            ],
+        ];
+
+        // Filter ini akan memfilter $rumahSakit yang dikirim dari Controller
+        $filtered = collect($rumahSakit)->filter(function($rs) {
+            return request('search')
+                ? str_contains(strtolower($rs['nama']), strtolower(request('search')))
+                : true;
+        });
+    @endphp
+
         <div class="card-location">
             <i class='bx bx-map'></i>
             <span>{{ $rs['alamat'] }}</span>
@@ -126,10 +164,48 @@
             <span>{{ $rs['no_hp'] }}</span>
         </div>
 
+
         <!-- Tombol detail (tengah) -->
         <div class="card-footer-center">
             <a href="#" class="btn-detail">Detail</a>
         </div>
+        
+    @else
+        @foreach ($filtered as $rs)
+            <a href="{{ route('rumahSakit.detail', ['id' => $rs['id']]) }}" class="card-link">
+                <div class="card">
+
+                <div class="card-image">
+                    <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
+                </div>
+
+                    <div class="card-header">
+                        <h2>{{ $rs['nama'] }}</h2>
+                        <span class="tipe tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
+                    </div>
+                    <p><strong>Alamat:</strong> {{ $rs['alamat'] }}</p>
+                    <p><strong>No. HP:</strong> {{ $rs['no_hp'] }}</p>
+                </div>
+            </a>
+        @endforeach
+    @endif
+</main>
+
+<div class="pagination">
+    <button id="prevBtn">Previous</button>
+    <div id="pageNumbers"></div>
+    <button id="nextBtn">Next</button>
+</div>
+
+<footer>
+        <p>© {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
+    </footer>
+
+<script>
+    // Script pagination ini sudah benar, tidak perlu diubah
+    const cardLinks = Array.from(document.querySelectorAll('.card-link'));
+    const cardsPerPage = 2;
+
     </div>
 @endforeach
 
@@ -152,14 +228,15 @@
 <script>
     const cards = Array.from(document.querySelectorAll('.card'));
     const cardsPerPage = 4;
+
     let currentPage = 1;
 
     function showPage(page) {
         const start = (page - 1) * cardsPerPage;
         const end = start + cardsPerPage;
 
-        cards.forEach((card, index) => {
-            card.style.display = (index >= start && index < end) ? 'block' : 'none';
+        cardLinks.forEach((cardLink, index) => {
+            cardLink.style.display = (index >= start && index < end) ? 'block' : 'none';
         });
 
         updatePageNumbers();
@@ -167,16 +244,28 @@
     }
 
     function updateButtons() {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+
+        if (currentPage === 1) {
+            prevBtn.style.visibility = "hidden";
+        } else {
+            prevBtn.style.visibility = "visible";
+        }
+
+        if (currentPage === totalPages) {
+            nextBtn.style.visibility = "hidden";
+        } else {
+            nextBtn.style.visibility = "visible";
+        }
 
         prevBtn.style.visibility = (currentPage === 1) ? "hidden" : "visible";
         nextBtn.style.visibility = (currentPage === totalPages) ? "hidden" : "visible";
     }
 
     function updatePageNumbers() {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         const pageNumbersContainer = document.getElementById('pageNumbers');
         pageNumbersContainer.innerHTML = "";
 
@@ -195,7 +284,7 @@
     }
 
     document.getElementById('nextBtn').addEventListener('click', () => {
-        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        const totalPages = Math.ceil(cardLinks.length / cardsPerPage);
         if (currentPage < totalPages) {
             currentPage++;
             showPage(currentPage);
