@@ -3,9 +3,220 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class RumahSakitController extends Controller
 {
+    private $fusekiEndpoint = 'http://localhost:3030/rsdb/query'; 
+    private $prefix = '
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rs: <http://www.semanticweb.org/user/ontologies/2025/10/rs#>
+    ';
+
+    private function queryFuseki($sparqlQuery)
+    {
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/sparql-results+json'
+            ])->get($this->fusekiEndpoint, [
+                'query' => $this->prefix . $sparqlQuery
+            ]);
+
+            if ($response->successful()) {
+                return $response->json()['results']['bindings'];
+            }
+            return []; 
+
+        } catch (\Exception $e) {
+            report($e); 
+            return null;
+        }
+    }
+
+    private function dropdown()
+    {
+        $kotaQuery = '
+            SELECT ?id_short ?label
+            WHERE {
+                { ?id rdf:type rs:Kota } UNION { ?id rdf:type rs:Kabupaten } .
+                ?id rdfs:label ?label .
+                BIND(REPLACE(STR(?id), STR(rs:), "") AS ?id_short)
+            } ORDER BY ?label
+        ';
+
+        $kecamatanQuery = '
+            SELECT ?id_short ?label ?induk_id
+            WHERE {
+                ?id rdf:type rs:Kecamatan .
+                ?id rdfs:label ?label .
+                ?id rs:isPartOf ?induk .
+                
+                BIND(REPLACE(STR(?id), STR(rs:), "") AS ?id_short)
+                BIND(REPLACE(STR(?induk), STR(rs:), "") AS ?induk_id)
+            } ORDER BY ?label
+        ';
+        
+        $spesialisasiQuery = '
+            SELECT ?id_short ?label
+            WHERE {
+                ?id rdf:type rs:Spesialisasi .
+                ?id rdfs:label ?label .
+                BIND(REPLACE(STR(?id), STR(rs:), "") AS ?id_short)
+            } ORDER BY ?label
+        ';
+
+        $asuransiQuery = '
+            SELECT ?id_short ?label
+            WHERE {
+                ?id rdf:type ?tipe .
+                ?tipe rdfs:subClassOf* rs:Asuransi .
+                ?id rdfs:label ?label .
+                BIND(REPLACE(STR(?id), STR(rs:), "") AS ?id_short)
+            } ORDER BY ?label
+        ';
+
+        return [
+            'kotaList' => $this->queryFuseki($kotaQuery) ?? [],
+            'kecamatanList' => $this->queryFuseki($kecamatanQuery) ?? [],
+            'spesialisasiList' => $this->queryFuseki($spesialisasiQuery) ?? [],
+            'asuransiList' => $this->queryFuseki($asuransiQuery) ?? [],
+        ];
+    }
+
+    public function home()
+    {
+        $dropdownData = $this->dropdown();
+
+        $featuredQuery = '
+            SELECT ?id ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
+            WHERE {
+                ?rs rdf:type ?class .
+                ?class rdfs:subClassOf* rs:RumahSakit .
+                
+                ?rs rs:namaRS ?nama .
+                ?rs rs:tipeRS ?tipe .
+                ?rs rs:noTelp ?noTelp .
+
+                OPTIONAL { 
+                    ?rs rs:isLocated ?kec_id .
+                    ?kec_id rdfs:label ?nama_kecamatan .
+                    
+                    OPTIONAL {
+                        ?kec_id rs:isPartOf ?kota_id .
+                        ?kota_id rdfs:label ?nama_kota .
+                    }
+                }
+                
+                BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
+            }
+            ORDER BY RAND()
+            LIMIT 4
+        ';
+
+        $featuredHospitals = $this->queryFuseki($featuredQuery);
+
+       return view('home', array_merge($dropdownData, [
+            'featuredHospitals' => $featuredHospitals
+        ]));
+    }
+
+    public function search(Request $request)
+    {
+        $q = $request->input('q'); 
+        $kota = $request->input('kota');
+        $kecamatan = $request->input('kecamatan');
+        $spesialisasi = $request->input('spesialisasi');
+        $asuransi = $request->input('asuransi');
+        $tipe_rs = $request->input('tipe_rs');
+
+        // Mulai membangun string kueri SPARQL
+        $sparqlQuery = '
+            SELECT DISTINCT ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
+            WHERE {
+            
+
+                ?rs_id rs:namaRS ?nama .
+                ?rs_id rs:tipeRS ?tipe .
+                ?rs_id rs:noTelp ?noTelp .
+
+                OPTIONAL { 
+                    ?rs_id rs:isLocated ?kec_id .
+                    ?kec_id rdfs:label ?nama_kecamatan .
+                    
+                    OPTIONAL {
+                        ?kec_id rs:isPartOf ?kota_id .
+                        ?kota_id rdfs:label ?nama_kota .
+                    }
+                }
+        ';
+
+        // --- FILTER DINAMIS ---
+
+        // 1. Filter dari Dropdown (Pencarian Presisi)
+        if ($request->filled('kecamatan')) {
+            // Jika user memilih Kecamatan spesifik, cari RS di kecamatan itu
+            $sparqlQuery .= ' ?rs_id rs:isLocated rs:' . $kecamatan . ' . ';
+        } 
+        elseif ($request->filled('kota')) {
+            // Jika Kecamatan KOSONG, tapi Kota DIPILIH, cari RS di semua kecamatan milik kota itu
+            $sparqlQuery .= ' 
+                ?rs_id rs:isLocated ?kec_cek .
+                ?kec_cek rs:isPartOf rs:' . $kota . ' . 
+            ';
+        }
+        if ($request->filled('spesialisasi')) {
+            $sparqlQuery .= ' ?rs_id rs:hasSpecialization rs:' . $spesialisasi . ' . ';
+        }
+        if ($request->filled('asuransi')) {
+            $sparqlQuery .= ' ?rs_id rs:acceptsInsurance rs:' . $asuransi . ' . ';
+        }
+        if ($request->filled('tipe_rs')) {
+            // Pastikan aman dari SPARQL injection sederhana
+            $sparqlQuery .= ' ?rs_id rs:tipeRS "' . addslashes($tipe_rs) . '" . ';
+        }
+
+        // 2. Filter dari Search Bar (Pencarian Teks Bebas)
+        if ($request->filled('search')) {
+            // Kita perlu menghubungkan ke label-label untuk dicari
+            $sparqlQuery .= '
+                OPTIONAL { ?rs_id rs:isLocated ?kec_id . ?kec_id rdfs:label ?labelKecamatan . }
+                OPTIONAL { ?rs_id rs:hasSpecialization ?spec_id . ?spec_id rdfs:label ?labelSpesialisasi . }
+            ';
+            
+            // Ambil teks pencarian dan buat jadi huruf kecil
+            $searchText = strtolower($q); 
+            
+            // Gunakan FILTER CONTAINS() untuk mencari
+            $sparqlQuery .= '
+                FILTER (
+                    CONTAINS(LCASE(?nama), "' . $searchText . '") || 
+                    CONTAINS(LCASE(?labelKecamatan), "' . $searchText . '") ||
+                    CONTAINS(LCASE(?labelSpesialisasi), "' . $searchText . '")
+                )
+            ';
+        }
+
+        // Akhiri kueri
+        $sparqlQuery .= '
+                BIND(REPLACE(STR(?rs_id), STR(rs:), "") AS ?id)
+            } 
+        ';
+
+        $results = $this->queryFuseki($sparqlQuery);
+        $dropdownData = $this->dropdown();
+
+        if (is_null($results)) {
+            return back()->with('error', 'Gagal terhubung ke server database. Pastikan Fuseki sudah berjalan.');
+        }
+
+        // Tampilkan view 'hasil.blade.php' dan kirim data hasilnya
+        return view('pencarian', array_merge($dropdownData, [
+            'results' => $results,
+            'inputs' => $request->all()
+        ]));
+    }
+    
     public function show($id)
     {
         $dataRS = [

@@ -6,12 +6,11 @@
     <title>Detail Rumah Sakit - Medan HealthSeek</title>
     
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/navbar_pencarian.css') }}">
      <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 
 </head>
 <body>
-@include('partials._navbar_pencarian')
+@include('partial.navbar')
     <main class="container">
         
         <article class="detail-content">
