@@ -20,7 +20,7 @@
         <form class="nav-form" method="GET" action="{{ route('pencarian') }}">
             <input type="text" name="search" placeholder="Cari rumah sakit..." class="search-input">
 
-             <button type="submit" class="btn-cari">Cari</button>
+            <button type="submit" class="btn-cari">Cari</button>
 
             <select name="tipe">
                 <option value="">Tipe RS</option>
@@ -56,16 +56,14 @@
             </select>
         </form>
 
-         <a href="{{ route('home') }}" class="btn-beranda">Beranda</a>
+        <a href="{{ route('home') }}" class="btn-beranda">Beranda</a>
 
     </nav>
 
 
     <main class="card-container" id="cardContainer">
     @php
-        // ==========================================================
-        // PERUBAHAN DI SINI: Data dummy ini disamakan dengan Controller
-        // ==========================================================
+        
         $rumahSakit = [
             [
                 'id' => 1,
@@ -90,7 +88,6 @@
             ],
         ];
 
-        // Filter ini akan memfilter $rumahSakit yang dikirim dari Controller
         $filtered = collect($rumahSakit)->filter(function($rs) {
             return request('search')
                 ? str_contains(strtolower($rs['nama']), strtolower(request('search')))
@@ -134,7 +131,6 @@
     </footer>
 
 <script>
-    // Script pagination ini sudah benar, tidak perlu diubah
     const cardLinks = Array.from(document.querySelectorAll('.card-link'));
     const cardsPerPage = 2;
     let currentPage = 1;
