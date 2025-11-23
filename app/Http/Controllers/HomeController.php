@@ -11,7 +11,7 @@ class HomeController extends Controller
         $rumahSakit = [
                     [
                         'id' => 1,
-                        'nama' => 'RSU Royal Prima',
+                        'nama' => 'Rumah Sakit Umum Royal Prima',
                         'alamat' => 'Jl. Ayahanda No.68A, Medan Petisah, Medan',
                         'No Handphone' => '0812-3456-7890',
                         'tipe' => 'A'

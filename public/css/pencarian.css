@@ -12,33 +12,41 @@ body {
   font-family: "Poppins", sans-serif;
   background: var(--secondary);
   color: var(--dark);
+  padding-top: 90px;
 }
 
-/* Navbar */
-.navbar {
-   position: relative;
-  height: 10vh;
-  background: linear-gradient(135deg, var(--primary), #9cd89c);
+/* LAYOUT UTAMA (FILTER + CARD) */
+.main-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
-  padding-left: 2rem;
-  color: var(--light);
-  text-align: center;
-  overflow: visible;
-  z-index: 5;
+  gap: 2rem;
+  padding: 2rem 4rem;
 }
 
-
-.nav-form {
+/* SIDEBAR FILTER */
+.filter-card {
+  background: var(--light);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 260px;
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
 }
 
-.nav-form input,
-.nav-form select {
+.filter-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filter-card input,
+.filter-card select {
   padding: 0.6rem 0.9rem;
   border: 1.5px solid #ddd;
   border-radius: var(--radius);
@@ -47,178 +55,63 @@ body {
   transition: border 0.2s ease;
 }
 
-.nav-form input:focus,
-.nav-form select:focus {
+.filter-card input:focus,
+.filter-card select:focus {
   border-color: var(--primary);
 }
 
-.search-input {
-  width: 220px;
-}
-
-.btn-cari {
-  background: #a8d8a7;
+/* Tombol Cari di Sidebar */
+.btn-filter-cari {
+  background: var(--primary);
   color: var(--light);
   border: none;
-  padding: 0.6rem 1rem;
+  padding: 0.7rem;
   border-radius: var(--radius);
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.btn-cari:hover {
-  background: #587e58;
-}
-
-.nav-form,
-.btn-beranda {
-  position: relative;
-  z-index: 10;
-}
-
-/* Search dan Filter Navbar */
-.search-box {
-  align-self: center;
-  border: 2px solid #e0e0e0;
-  background: var(--primary);
-  color: var(--light);
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0.8rem 1.5rem;
-  font-size: 1.3rem;
-}
-
-/* Input Pencarian */
-.search-box input[type="text"] {
-  flex: 1 1 250px;
-  border: 2px solid #e0e0e0;
-  padding: 0.6rem 1rem;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border 0.3s ease;
-}
-
-.search-box input[type="text"]:focus {
-  border-color: var(--primary);
-}
-
-/* Dropdown Filter */
-.nav-form select {
-  padding: 0.55rem 0.9rem;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  background-color: #f8f8f8;
-  color: var(--dark);
-  font-size: 0.9rem;
-  font-family: "Poppins", sans-serif;
-  transition: all 0.2s ease;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' class='bi bi-chevron-down' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 0.8rem center;
-  background-size: 0.9rem;
-  min-width: 120px;
-}
-
-.nav-form select:focus {
-  border-color: var(--primary);
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(180, 180, 180, 0.3);
-  outline: none;
-}
-
-
-/* Tombol Cari */
-.search-box button {
-  background: var(--primary);
-  color: var(--light);
-  border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  white-space: nowrap;
-}
-
-.search-box button:hover {
+.btn-filter-cari:hover {
   background: #6ca76d;
-  transform: scale(1.05);
-}
-
-/* Responsif */
-@media (max-width: 850px) {
-  .search-box {
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: 20px;
-    gap: 10px;
-  }
-
-  .search-box input,
-  .search-box select,
-  .search-box button {
-    width: 100%;
-  }
-}
-
-/* Tombol Beranda */
-.btn-beranda {
-  position: absolute;
-  right: 2rem;
-  background: var(--light);
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.btn-beranda:hover {
-  background: #f1f1f1;
   transform: translateY(-2px);
 }
 
-/* Card Section */
+/* CARD CONTAINER */
 .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-    padding: 40px 80px;
-    justify-content: center;
-    align-items: start;
-    align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  flex: 1;
+  align-items: stretch;
 }
 
-/* Card */
 .card {
-    background: white;
-    border-radius: 10px;
-    padding: 12px 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 100%;
-    box-sizing: border-box;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-height: 190px; /* lebih kecil dari sebelumnya */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
- transform: translateY(-8px) scale(1.02);
- box-shadow: 0 10px 25px rgba(127, 183, 126, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(127, 183, 126, 0.25);
 }
-
 
 .card-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 4px; /* dirapetin */
+  min-height: 38px;
 }
 
 .card-header h2 {
@@ -226,30 +119,25 @@ body {
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
-  letter-spacing: 0.3px;
-}
-
-.card p {
-  color: #555;
+  flex: 1;
   line-height: 1.1;
-  margin-top: 0;
-  margin-bottom: 0.3rem;
+  word-break: break-word;
 }
 
 .tipe {
-   position: relative;
-  top: -4px;
-  right: -4px;
+  background-color: var(--primary);
+  flex-shrink: 0;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+  width: 28px;              /* lebar tetap */
+  height: 28px;             /* tinggi tetap */
+  border-radius: 50%;       /* selalu bulat */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  font-weight: bold;
-  color: white;
-  font-size: 0.85rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  margin-left: auto;        /* tetap di kanan */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tipe-a { background-color: #007bff; }
@@ -257,173 +145,153 @@ body {
 .tipe-c { background-color: #ffc107; color: #000; }
 .tipe-d { background-color: #dc3545; }
 
+
+.card-image img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* LOKASI CARD */
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 6px; /* dirapetin */
+  min-height: 32px;
+}
+
+.card-location i {
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.card-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.card-phone i {
+  color: var(--primary);
+  font-size: 1.4rem;
+}
+
+
+.card-footer-center {
+  margin-top: auto;          /* biar tetap ke bawah */
+  text-align: center;        /* tengah */
+  padding-top: 10px;
+  position: relative;
+}
+
+
+.btn-detail {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-detail:hover {
+    background: #6ca76d;
+    transform: scale(1.05);
+}
+
+/* NOT FOUND */
 .not-found {
-  grid-column: 1 / -1; /* biar di tengah grid */
+  grid-column: 1 / -1;
   text-align: center;
   color: #666;
   font-size: 1.1rem;
   padding: 3rem 0;
-  animation: fadeIn 0.5s ease-in;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+  margin-top: 30px;
 }
 
-/* footer */
+#pageNumbers {
+  display: flex;
+  gap: 8px;
+}
+
+.page-btn,
+#prevBtn,
+#nextBtn {
+  border: 1px solid var(--primary);
+  padding: 6px 12px;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--primary);
+  transition: 0.3s;
+}
+
+.page-btn:hover,
+#prevBtn:hover,
+#nextBtn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.active-page {
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+}
+
+/* FOOTER */
 footer {
   background: var(--primary);
   color: var(--light);
   text-align: center;
-  padding: 0.1rem 1rem;
+  padding: 0.2rem ;
   font-size: 0.9rem;
   letter-spacing: 0.3px;
-  margin-top: 3rem;
+  margin-top: 2rem;
   box-shadow: 0 -2px 10px var(--shadow);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .search-input { width: 100%; }
-  .nav-form { justify-content: center; }
-}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .main-content {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
 
-/* Floating Icons di Navbar */
-.floating-icons {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Icon umum */
-.floating-icons .icon {
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  opacity: 1 !important;
-  filter: none !important;
-  position: absolute;
-  font-size: 1.8rem;
-  opacity: 0.25;
-  animation: floatIcon 5s ease-in-out infinite;
-}
-
-/* kiri dekat search */
-.floating-icons .icon:nth-child(1) {
-  top: 25%;
-  left: 8%;
-  animation-duration: 4.7s;
-}
-
-/* di antara tipe RS & asuransi */
-.floating-icons .icon:nth-child(2) {
-  top: 35%;
-  left: 34%;
-  animation-duration: 5.2s;
-}
-
-/* antara spesialis & beranda */
-.floating-icons .icon:nth-child(3) {
-  top: 28%;
-  right: 26%;
-  animation-duration: 5.5s;
-}
-
-/* dekat tombol beranda */
-.floating-icons .icon:nth-child(4) {
-  top: 11%;
-  right: 12%;
-  animation-duration: 4.9s;
-}
-
-/* Biar jaraknya lebih renggang dan melebar */
-.floating-icons-nav .icon:nth-child(1) { left: -120px; animation-duration: 4.3s; }
-.floating-icons-nav .icon:nth-child(2) { left: -45px; animation-duration: 5.1s; }
-.floating-icons-nav .icon:nth-child(3) { left: 40px; animation-duration: 4.7s; }
-.floating-icons-nav .icon:nth-child(4) { left: 120px; animation-duration: 5.4s; }
-
-/* Animasi melayang */
-@keyframes floatIcon {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-  100% { transform: translateY(0); }
-}
-
-.card-image {
+  .filter-card {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    position: relative;
+  }
 }
 
-.card-image img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-/* pagination */
-.pagination {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    padding: 25px 0;
-    margin-top: 110px;
-}
-
-#pageNumbers {
-    display: flex;
-    gap: 8px;
-}
-
-.page-btn {
-    border: 1px solid #7fb77e;
-    padding: 6px 12px;
-    border-radius: 5px;
-    background: white;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 14px;
-}
-
-.page-btn:hover {
-    background: #7fb77e;
-    color: white;
-}
-
-.active-page {
-    background: #7fb77e;
-    color: white;
-    font-weight: bold;
-}
-
-#prevBtn, #nextBtn {
-    padding: 7px 14px;
-    border-radius: 5px;
-    background: white;
-    border: 1px solid #7fb77e;
-    color: #7fb77e;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#prevBtn:hover, #nextBtn:hover {
-     background: #7fb77e;
-    color: white;
-}
 .card-link {
   text-decoration: none;
   color: inherit;
+}
+
+.filter-card label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--dark);
+  margin-bottom: -4px; /* jarak biar deket dropdown */
 }
