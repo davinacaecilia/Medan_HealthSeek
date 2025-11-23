@@ -237,8 +237,6 @@ body {
   justify-content: center; /* tengahin semua card */
   gap: 16px;
   padding: 2rem;
-  max-width: 1200px;       /* biar rapi di tengah */
-  margin: auto;
   animation: fadeInUp 1.2s ease forwards;
 }
 
@@ -382,7 +380,6 @@ body {
 /*see more butten */
 .see-more {
   text-align: center;
-  margin: 1.5rem 0 2rem;
 }
 
 .btn-see-more {
