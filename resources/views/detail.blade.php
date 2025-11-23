@@ -6,20 +6,18 @@
     <title>Detail Rumah Sakit - Medan HealthSeek</title>
     
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/navbar_pencarian.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-
+<!--     
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">  -->
 </head>
 <body>
-@include('partials._navbar_pencarian')
+
+    @include('partials.navbar')
+
     <main class="container">
         
         <article class="detail-content">
             
-            <figure class="detail-image-container">
-                <img src="https://asset-2.tribunnews.com/medan/foto/bank/images/rs-bunda-thamrin-medan-1.jpg" alt="Gambar Rumah Sakit">
-                <figcaption>Tampak depan rumah sakit</figcaption>
-            </figure>
+            <!-- bagian gambar yang dihapus -->
 
             <header class="detail-header">
                 <h1>{{ $rs['nama'] }}</h1>
@@ -57,7 +55,7 @@
             <section class="detail-section">
                 <h2>Asuransi yang Diterima</h2>
                 <ul class="tag-list">
-                     @php
+                    @php
                         $asuransiList = (isset($rs['Asuransi']) && $rs['Asuransi'] != '') ? explode(',', $rs['Asuransi']) : [];
                     @endphp
                     @forelse($asuransiList as $asuransi)
@@ -68,7 +66,7 @@
                 </ul>
             </section>
             
-            </article>
+        </article>
 
         <aside class="detail-sidebar">
             
@@ -94,8 +92,9 @@
             <div class="map-box">
                 <h3>Lokasi di Peta</h3>
                 <div class="gmaps-embed">
+                    
                     <iframe 
-                        src="{{ $rs['link_gmaps'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15929.61058474246!2d98.66699197992446!3d3.593764024320735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x303131c9a59ef835%3A0x69f21f1f727c6314!2sRSUD%20Dr.%20Pirngadi%20Kota%20Medan!5e0!3m2!1sid!2sid!4v1678888888888!5m2!1sid!2sid' }}" 
+                        src="{{ $rs['link_gmaps'] ?? '' }}" 
                         width="100%" 
                         height="300" 
                         style="border:0;" 
