@@ -21,52 +21,31 @@ body {
   color: var(--dark);
 }
 
-/* Navbar di Halaman Detail */
-.navbar-detail {
-  background: linear-gradient(135deg, var(--primary), #9cd89c);
-  padding: 1rem 2rem;
-  box-shadow: 0 4px 10px var(--shadow);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+/* Navbar tidak perlu diatur di sini lagi karena pakai punya teman 
+   atau css global. Fokus ke container di bawah.
+*/
 
-.navbar-detail .brand {
-  color: var(--light);
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-decoration: none;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-/* Tombol Back */
-.btn-back {
-  background: var(--light);
-  color: var(--primary);
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.btn-back:hover {
-  background: #f1f1f1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* Layout Konten Utama */
+/* =========================================================
+   PERBAIKAN UTAMA ADA DI SINI (Class .container)
+   ========================================================= */
 .container {
   max-width: 1100px;
-  margin: 2rem auto;
+  
+  /* 1. SOLUSI KEPOTONG NAVBAR: 
+     Ganti margin-top jadi lebih besar (misal 120px) biar turun ke bawah. 
+  */
+  margin: 120px auto 2rem; 
+  
   padding: 0 1rem;
   display: grid;
-  grid-template-columns: 1fr; /* Default 1 kolom (mobile) */
+  grid-template-columns: 1fr; 
   gap: 2rem;
+
+  /* 2. SOLUSI UKURAN CARD "LEBIH":
+     'align-items: start' akan bikin tinggi card MENYESUAIKAN ISI kontennya,
+     bukan memaksa tingginya sama dengan sidebar/map.
+  */
+  align-items: start; 
 }
 
 /* Layout 2 kolom untuk desktop */
@@ -82,28 +61,11 @@ body {
   padding: 1.5rem;
   border-radius: var(--radius);
   box-shadow: 0 6px 15px var(--shadow);
+  /* Pastikan tidak ada height fix */
+  height: auto;
 }
 
-.detail-image-container {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-.detail-image-container img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: var(--radius);
-}
-
-.detail-image-container figcaption {
-  font-size: 0.85rem;
-  color: #777;
-  text-align: center;
-  margin-top: 0.5rem;
-  font-style: italic;
-}
-
+/* Header Judul */
 .detail-header {
   display: flex;
   justify-content: space-between;
@@ -118,7 +80,7 @@ body {
   color: var(--primary);
 }
 
-/* Mengambil style Tipe RS dari home.css */
+/* Style Tipe RS */
 .tipe-rs {
   display: inline-flex;
   width: 40px;
@@ -154,6 +116,7 @@ body {
   color: #555;
 }
 
+/* Tag List (Fasilitas, dll) */
 .tag-list {
   display: flex;
   flex-wrap: wrap;

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Rumah Sakit - Medan HealthSeek</title>
     
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
 
 </head>
 <body>
+    @include('partials.navbar')
     <main class="container">
         
         <article class="detail-content">
@@ -50,6 +50,7 @@
                     @endforelse
                 </ul>
             </section>
+
         </article>
 
         <aside class="detail-sidebar">
@@ -72,6 +73,7 @@
             <div class="map-box">
                 <h2>Lokasi di Peta</h3>
                 <div class="gmaps-embed">
+                    
                     <iframe 
                         src="{{ $rs['gmaps'] }}" 
                         width="100%" 

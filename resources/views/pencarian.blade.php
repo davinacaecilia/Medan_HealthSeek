@@ -9,12 +9,9 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     @include('partial.navbar')
 
-    <!-- Konten Utama -->
     <div class="main-content">
-        <!-- Sidebar kiri: Filter -->
         <div class="filter-card">
             <form method="GET" action="{{ route('rumahSakit.list') }}">
             <input type="text" name="q" placeholder="Cari rumah sakit..." class="filter-search">
@@ -74,8 +71,8 @@
         </form>
         </div>
 
-        <!-- Kanan: Card hasil pencarian -->
         <main class="card-container" id="cardContainer">
+
         @forelse ($results as $item)
             <div class="card">
                 <div class="card-header">
@@ -108,16 +105,14 @@
         </main>
     </div>
 
-    <!-- Pagination -->
     <div class="pagination">
         <button id="prevBtn">Previous</button>
         <div id="pageNumbers"></div>
         <button id="nextBtn">Next</button>
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
+        <p>© {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
     </footer>
 
     <script>
@@ -161,7 +156,6 @@
         function showPage(page) {
             const start = (page - 1) * cardsPerPage;
             const end = start + cardsPerPage;
-
             cards.forEach((card, index) => {
                 card.style.display = (index >= start && index < end) ? 'block' : 'none';
             });
