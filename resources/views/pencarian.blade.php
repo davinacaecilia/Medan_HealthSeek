@@ -17,7 +17,7 @@
         <!-- Sidebar kiri: Filter -->
         <div class="filter-card">
             <form method="GET" action="{{ route('rumahSakit.list') }}">
-            <input type="text" name="search" placeholder="Cari rumah sakit..." class="filter-search">
+            <input type="text" name="q" placeholder="Cari rumah sakit..." class="filter-search">
 
             <label for="tipe">Tipe Rumah Sakit</label>
             <select id="tipe_rs" name="tipe_rs">
@@ -76,30 +76,29 @@
 
         <!-- Kanan: Card hasil pencarian -->
         <main class="card-container" id="cardContainer">
-       
         @forelse ($results as $item)
-        <div class="card">
-            <div class="card-header">
-                <h2>{{ $item['nama']['value'] }}</h2>
-                <span class="tipe tipe-{{ strtolower($item['tipe']['value'] ) }}">{{ $item['tipe']['value'] }}</span>
-            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>{{ $item['nama']['value'] }}</h2>
+                    <span class="tipe tipe-{{ strtolower($item['tipe']['value'] ) }}">{{ $item['tipe']['value'] }}</span>
+                </div>
 
-            <div class="card-location">
-                <i class='bx bx-map'></i>
-                <span>{{ $item['nama_kecamatan']['value'] }}, {{ $item['nama_kota']['value'] }}</span>
-            </div>
+                <div class="card-location">
+                    <i class='bx bx-map'></i>
+                    <span>{{ $item['nama_kecamatan']['value'] }}, {{ $item['nama_kota']['value'] }}</span>
+                </div>
 
-            <!-- TELEPON -->
-            <div class="card-phone">
-                <i class='bx bx-phone'></i>
-                <span>{{ $item['noTelp']['value'] }}</span>
-            </div>
+                <!-- TELEPON -->
+                <div class="card-phone">
+                    <i class='bx bx-phone'></i>
+                    <span>{{ $item['noTelp']['value'] }}</span>
+                </div>
 
-            <!-- Tombol detail (tengah) -->
-            <div class="card-footer-center">
-                <a href="#" class="btn-detail">Detail</a>
+                <!-- Tombol detail (tengah) -->
+                <div class="card-footer-center">
+                    <a href="{{ route('rumahSakit.detail', ['id' =>$item['id']['value'] ]) }}" class="btn-detail">Detail</a>
+                </div>
             </div>
-        </div>
         @empty
             <div class="not-found">
                 <p>Tidak ada data rumah sakit ditemukan.</p>
@@ -150,9 +149,6 @@
                 });
 
                 kecamatanDropdown.disabled = false;
-            } else {
-                kecamatanDropdown.innerHTML = '<option value="">Pilih Kota Terlebih Dahulu</option>';
-                kecamatanDropdown.disabled = true;
             }
         });
     </script>

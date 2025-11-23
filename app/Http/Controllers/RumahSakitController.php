@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class RumahSakitController extends Controller
 {
-    private $fusekiEndpoint = 'http://localhost:3030/rsdb/query'; 
+    private $fusekiEndpoint = 'http://localhost:3030/rumahsakit/query'; 
     private $prefix = '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -130,12 +130,51 @@ class RumahSakitController extends Controller
         $asuransi = $request->input('asuransi');
         $tipe_rs = $request->input('tipe_rs');
 
+
+        $detectedClass = null;
+        $cleanQ = '';
+        
+        if ($request->filled('q')) {
+            $tempQ = strtolower($q);
+
+            if (preg_match('/\brsu\b/', $tempQ) || str_contains($tempQ, 'rumah sakit umum')) {
+                $detectedClass = 'rs:RSU';
+                $tempQ = str_replace(['rumah sakit umum', 'rsu'], '', $tempQ);
+            } elseif (preg_match('/\brsia\b/', $tempQ) || str_contains($tempQ, 'ibu dan anak')) {
+                $detectedClass = 'rs:RSIA';
+                $tempQ = str_replace(['rumah sakit ibu dan anak', 'ibu dan anak', 'rsia'], '', $tempQ);
+            } elseif (str_contains($tempQ, 'mata') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit'))) {
+                $detectedClass = 'rs:RSMata';
+                $tempQ = str_replace(['rumah sakit mata', 'rs mata', 'mata'], '', $tempQ);
+            } elseif (str_contains($tempQ, 'bedah') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit'))) {
+                $detectedClass = 'rs:RSBedah';
+                $tempQ = str_replace(['rumah sakit bedah', 'rs bedah', 'bedah'], '', $tempQ);
+            } elseif (preg_match('/\brsj\b/', $tempQ) || str_contains($tempQ, 'rumah sakit jiwa') || (str_contains($tempQ, 'jiwa') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit')))) {
+                $detectedClass = 'rs:RSJiwa'; 
+                $tempQ = str_replace(['rumah sakit jiwa', 'rs jiwa', 'rsj', 'jiwa'], '', $tempQ);
+            } elseif (str_contains($tempQ, 'ginjal') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit') || str_contains($tempQ, 'khusus'))) {
+                $detectedClass = 'rs:RSGinjal'; 
+                $tempQ = str_replace(['rumah sakit ginjal', 'rs ginjal', 'rs khusus ginjal', 'khusus ginjal', 'ginjal'], '', $tempQ);
+            }
+
+            $tempQ = str_replace('rumah sakit', '', $tempQ);
+            $tempQ = str_replace(['rs ', 'rs.', 'rs_'], '', $tempQ);
+            $cleanQ = trim($tempQ);
+        }
+
         // Mulai membangun string kueri SPARQL
         $sparqlQuery = '
-            SELECT DISTINCT ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
-            WHERE {
-            
+            SELECT DISTINCT ?id ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
+            WHERE {           
+        ';
 
+        if ($detectedClass) {
+            $sparqlQuery .= ' ?rs_id rdf:type ' . $detectedClass . ' . ';
+        } else {
+            $sparqlQuery .= ' ?rs_id rdf:type ?rs_tipe . ?rs_tipe rdfs:subClassOf* rs:RumahSakit . ';
+        }
+
+        $sparqlQuery .= '
                 ?rs_id rs:namaRS ?nama .
                 ?rs_id rs:tipeRS ?tipe .
                 ?rs_id rs:noTelp ?noTelp .
@@ -150,8 +189,6 @@ class RumahSakitController extends Controller
                     }
                 }
         ';
-
-        // --- FILTER DINAMIS ---
 
         // 1. Filter dari Dropdown (Pencarian Presisi)
         if ($request->filled('kecamatan')) {
@@ -176,23 +213,15 @@ class RumahSakitController extends Controller
             $sparqlQuery .= ' ?rs_id rs:tipeRS "' . addslashes($tipe_rs) . '" . ';
         }
 
-        // 2. Filter dari Search Bar (Pencarian Teks Bebas)
-        if ($request->filled('search')) {
-            // Kita perlu menghubungkan ke label-label untuk dicari
+        if ($cleanQ !== '') {
             $sparqlQuery .= '
-                OPTIONAL { ?rs_id rs:isLocated ?kec_id . ?kec_id rdfs:label ?labelKecamatan . }
                 OPTIONAL { ?rs_id rs:hasSpecialization ?spec_id . ?spec_id rdfs:label ?labelSpesialisasi . }
-            ';
-            
-            // Ambil teks pencarian dan buat jadi huruf kecil
-            $searchText = strtolower($q); 
-            
-            // Gunakan FILTER CONTAINS() untuk mencari
-            $sparqlQuery .= '
+                
                 FILTER (
-                    CONTAINS(LCASE(?nama), "' . $searchText . '") || 
-                    CONTAINS(LCASE(?labelKecamatan), "' . $searchText . '") ||
-                    CONTAINS(LCASE(?labelSpesialisasi), "' . $searchText . '")
+                    CONTAINS(LCASE(?nama), "' . $cleanQ . '") || 
+                    CONTAINS(LCASE(?nama_kecamatan), "' . $cleanQ . '") ||
+                    CONTAINS(LCASE(?nama_kota), "' . $cleanQ . '") ||
+                    CONTAINS(LCASE(?labelSpesialisasi), "' . $cleanQ . '")
                 )
             ';
         }
@@ -216,57 +245,71 @@ class RumahSakitController extends Controller
             'inputs' => $request->all()
         ]));
     }
-    
-    public function show($id)
+
+    public function detail($id)
     {
-        $dataRS = [
-            1 => [
-                'id' => 1,
-                'nama' => 'RSU Royal Prima',
-                'alamat' => 'Jl. Ayahanda No. 68, Sei Putih Tengah, Kec. Medan Petisah',
-                'No Handphone' => '0812-3456-7890', 
-                'tipe' => 'A',
-                'Jenis' => 'RSU', 
-                'Fasilitas' => 'ICU_Dewasa,ICCU,NICU,PICU,Lab_Patologi_Anatomi,Lab_Patologi_Klinik,CT_Scanner,MRI_Scanner,Rontgen,USG,Layanan_Ambulans,UGD_24_Jam,Apotek_24_Jam,Layanan_Rawat_Inap,Layanan_Rawat_Jalan,Ruang_Operasi,Unit_Fisioterapi',
-                'Spesialis' => 'Anak,BedahUmum,GigiDanMulut,GinjalDanHipertensi,Jantung,KandunganDanGinekologi,KulitDanKelamin,Mata,Onkologi,Ortopedi,Paru,PenyakitDalam,Saraf,THT,Psikiatri,Urologi',
-                'Asuransi' => 'BPJSKesehatan,BNI_Life,Prudential',
-                'link_gmaps' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3494.6637212622354!2d98.68038297432491!3d3.5759673963982053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3031304a07e42117%3A0xeb7f812c23db0b1f!2sRS%20Martha%20Friska%20Medan%20%2C!5e1!3m2!1sen!2sid!4v1763393088646!5m2!1sen!2sid',
-                'website' => 'http://www.royalprima.com'
-            ],
-            2 => [
-                'id' => 2,
-                'nama' => 'RS Columbia Asia Medan',
-                'alamat' => 'Jl. Listrik No. 2, Petisah Tengah, Kec. Medan Petisah',
-                'No Handphone' => '4566 368',
-                'tipe' => 'B',
-                'Jenis' => 'RSU',
-                'Fasilitas' => 'ICU_Dewasa,NICU,PICU,Bank_Darah,Lab_Patologi_Anatomi,Lab_Patologi_Klinik,CT_Scanner,Mammografi,MRI_Scanner,Rontgen,USG,Layanan_Ambulans,UGD_24_Jam,Apotek_24_Jam,Layanan_Rawat_Inap,Layanan_Rawat_Jalan,Ruang_Operasi,Unit_Fisioterapi',
-                'Spesialis' => 'Anak,BedahUmum,GigiDanMulut,GinjalDanHipertensi,Jantung,KandunganDanGinekologi,KulitDanKelamin,Mata,Onkologi,Ortopedi,Paru,PenyakitDalam,Saraf,THT,Psikiatri,Urologi',
-                'Asuransi' => 'AIA_Finance,Allianz,AXA_Mandiri,BNI_Life,Great_Eastern_Life,Manulife,Prudential,Sinarmas_MSIG_Life',
-                'link_gmaps' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3453.1472240019375!2d98.6720793!3d3.585727!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x303131c952240c2d%3A0x91633eb373cb5093!2sRS%20Columbia%20Asia%20Medan!5e1!3m2!1sid!2sid!4v1763395438496!5m2!1sid!2sid',
-                'website' => 'http://columbiaasia.co.id/rs-columbia-asia-medan'
-            ],
-            3 => [
-                'id' => 3,
-                'nama' => 'RS Hermina Medan',
-                'alamat' => 'Jl. Asrama No. 34, Sei Sikambing C II, Kec. Medan Helvetia',
-                'No Handphone' => '80862525',
-                'tipe' => 'C',
-                'Jenis' => 'RSIA', 
-                'Fasilitas' => 'ICU_Dewasa,ICCU,NICU,PICU,Lab_Patologi_Klinik,CT_Scanner,Rontgen,USG,Layanan_Ambulans,UGD_24_Jam,Apotek_24_Jam,Layanan_Rawat_Inap,Layanan_Rawat_Jalan,Ruang_Operasi,Unit_Fisioterapi',
-                'Spesialis' => 'Anak,BedahUmum,GigiDanMulut,GinjalDanHipertensi,Jantung,KandunganDanGinekologi,KulitDanKelamin,Mata,Onkologi,Ortopedi,Paru,PenyakitDalam,Saraf,THT,Psikiatri,Urologi',
-                'Asuransi' => 'BPJSKesehatan,AIA_Finance,Allianz',
-                'link_gmaps' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.1461755444957!2d98.6597572!3d3.5860046000000008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30312e29e2d50817%3A0x5a3d252e34894e86!2sRumah%20Sakit%20Khusus%20Ginjal%20Rasyida!5e1!3m2!1sid!2sid!4v1763395682144!5m2!1sid!2sid',
-                'website' => 'http://herminahospitals.com/id/branch/hermina-medan'
-            ],
-        ];
+        $sparqlQuery = '
+            SELECT * WHERE {
+                BIND(rs:' . $id . ' AS ?rs_id)
+                
+                ?rs_id rs:namaRS ?nama .
+                ?rs_id rs:tipeRS ?tipe .
+                ?rs_id rs:alamat ?alamat .
+                ?rs_id rs:noTelp ?telepon .
+                ?rs_id rs:linkGmaps ?gmaps .
 
-        $rs = $dataRS[$id] ?? null;
+                OPTIONAL {
+                    ?rs_id rdf:type ?kelas_rs .       
+                    ?kelas_rs rdfs:subClassOf* rs:RumahSakit . 
+                    FILTER(?kelas_rs != rs:RumahSsakit)        
+                    ?kelas_rs rdfs:label ?jenis_rs .  
+                }
+                
+                ?rs_id rs:hasSpecialization ?spec_id . 
+                ?spec_id rdfs:label ?spesialisasi . 
+                
+                ?rs_id rs:providesFacility ?fac_id . 
+                ?fac_id rdfs:label ?fasilitas . 
 
-        if (!$rs) {
-            abort(404);
+                ?rs_id rs:acceptsInsurance ?ins_id . 
+                ?ins_id rdfs:label ?asuransi . 
+            }
+        ';
+        $results = $this->queryFuseki($sparqlQuery);
+
+        if (is_null($results)) {
+            return redirect()->route('search.form')->with('error', 'Gagal terhubung ke server database.');
         }
 
-        return view('detail', compact('rs'));
+        if (empty($results)) {
+            abort(404, 'Rumah Sakit tidak ditemukan');
+        }
+
+        $rs = [
+            'nama' => $results[0]['nama']['value'],
+            'tipe' => $results[0]['tipe']['value'],
+            'alamat' => $results[0]['alamat']['value'],
+            'telepon' => $results[0]['telepon']['value'],
+            'gmaps' => $results[0]['gmaps']['value'],
+            'spesialisasi' => [],
+            'fasilitas' => [],
+            'asuransi' => [],
+            'jenis' => []
+        ];
+        
+        // Kumpulkan semua data yang berulang
+        foreach ($results as $row) {
+            if (isset($row['spesialisasi'])) $rs['spesialisasi'][] = $row['spesialisasi']['value'];
+            if (isset($row['fasilitas'])) $rs['fasilitas'][] = $row['fasilitas']['value'];
+            if (isset($row['asuransi'])) $rs['asuransi'][] = $row['asuransi']['value'];
+            if (isset($row['jenis_rs'])) $rs['jenis'][] = $row['jenis_rs']['value'];
+        }
+
+        $rs['spesialisasi'] = array_unique($rs['spesialisasi']);
+        $rs['fasilitas'] = array_unique($rs['fasilitas']);
+        $rs['asuransi'] = array_unique($rs['asuransi']);
+        $rs['jenis'] = array_unique($rs['jenis']);
+        
+        return view('detail', ['rs' => $rs]);
     }
 }

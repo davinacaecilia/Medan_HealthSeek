@@ -108,7 +108,7 @@
                 </div>
 
                 <div class="card-footer-center">
-                    <a href="#" class="btn-detail">Detail</a>
+                    <a href="{{ route('rumahSakit.detail', ['id' =>$rs['id']['value'] ]) }}" class="btn-detail">Detail</a>
                 </div>
             </div>
         @empty
