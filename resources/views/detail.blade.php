@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Rumah Sakit - Medan HealthSeek</title>
-    
+
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
 
 </head>
 <body>
     @include('partials.navbar')
     <main class="container">
-        
+
         <article class="detail-content">
             <header class="detail-header">
                 <h1>{{ $rs['nama'] }}</h1>
@@ -54,13 +54,13 @@
              <div class="map-box">
                 <h2>Lokasi di Peta</h3>
                 <div class="gmaps-embed">
-                    
-                    <iframe 
-                        src="{{ $rs['gmaps'] }}" 
-                        width="100%" 
-                        height="300" 
-                        style="border:0;" 
-                        allowfullscreen="" 
+
+                    <iframe
+                        src="{{ $rs['gmaps'] }}"
+                        width="100%"
+                        height="300"
+                        style="border:0;"
+                        allowfullscreen=""
                         loading="lazy">
                     </iframe>
                 </div>
@@ -71,24 +71,24 @@
         <aside class="detail-sidebar">
             <div class="info-box">
                 <h2>Informasi & Lokasi</h2>
-                
+
                 <p><strong>Alamat:</strong><br>
                 {{ $rs['alamat'] }}</p>
-                
+
                 <p><strong>No. Telepon:</strong><br>
                 {{ $rs['telepon'] }}</p>
-                
+
                 <p><strong>Jenis RS:</strong><br>
                 @foreach($rs['jenis'] as $jenis)
                     {{ $jenis }}
                 @endforeach
                 </p>
             </div>
-          
+
         </aside>
     </main>
     <footer>
-        <p>© {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
+        <p>© {{ date('Y') }} HealthSeek. All Rights Reserved.</p>
     </footer>
 
 </body>

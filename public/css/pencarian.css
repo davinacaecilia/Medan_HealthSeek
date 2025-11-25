@@ -1,5 +1,5 @@
 :root {
-  --primary: #7fb77e;
+  --primary: #4c8547ff;;
   --secondary: #f9f9f9;
   --dark: #1f2937;
   --light: #ffffff;
@@ -140,9 +140,9 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.tipe-a { background-color: #007bff; }
-.tipe-b { background-color: #28a745; }
-.tipe-c { background-color: #ffc107; color: #000; }
+.tipe-a { background-color: #28a745; }
+.tipe-b { background-color: #007bff; }
+.tipe-c { background-color: #ffc107; }
 .tipe-d { background-color: #dc3545; }
 
 
@@ -293,4 +293,92 @@ footer {
   font-size: 0.9rem;
   color: var(--dark);
   margin-bottom: -4px; /* jarak biar deket dropdown */
+}
+
+/* CUSTOM DROPDOWN WITH SEARCH */
+.custom-select {
+  width: 100%;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+/* Trigger utama */
+.custom-select-trigger {
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  background: #e7e7e7;
+  cursor: pointer;
+  transition: border 0.2s ease, background 0.2s ease;
+  color: #333;
+}
+
+/* Dropdown panel */
+.custom-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #f2f2f2;
+  border-radius: 10px;
+  border: 1.5px solid #ddd;
+  max-height: 230px;
+  overflow: hidden;
+  display: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+/* tampil saat open */
+.custom-select.open .custom-options {
+  display: block;
+}
+
+/* Search input */
+.custom-options .custom-search {
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  border-bottom: 1.3px solid #ccc;
+  font-size: 0.9rem;
+  outline: none;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+/* Wrapper opsi */
+.options-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+/* Item */
+.custom-option {
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  background: #f2f2f2;
+  color: #000;
+  transition: background 0.15s ease;
+}
+
+.custom-option:hover {
+  background: #e0e0e0;
+}
+
+/* Opsi “Semua …” */
+.custom-option[data-value=""] {
+  font-weight: 600;
+  color: #000;
+}
+
+/* Flip dropdown */
+.custom-options.up {
+    bottom: 100%;
+    top: auto;
+}
+.custom-options.down {
+    top: 100%;
+    bottom: auto;
 }
