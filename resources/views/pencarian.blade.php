@@ -14,7 +14,7 @@
     <div class="main-content">
         <div class="filter-card">
             <form method="GET" action="{{ route('rumahSakit.list') }}">
-            <input type="text" name="q" placeholder="Cari rumah sakit..." class="filter-search">
+            <input type="text" name="q" placeholder="Cari nama atau jenis rumah sakit..." class="filter-search">
 
             <label for="tipe">Tipe Rumah Sakit</label>
             <select id="tipe_rs" name="tipe_rs">
@@ -58,13 +58,6 @@
             <label for="kecamatan">Kecamatan</label>
             <select id="kecamatan" name="kecamatan" >
                 <option value="">Semua Kecamatan</option>
-            </select>
-            
-            <label for="urutkan">Urutkan Berdasarkan</label>
-            <select id="urutkan" name="urutkan">
-                <option value="">Pilih Urutan</option>
-                <option value="nama">Nama</option>
-                <option value="tipe">Tipe</option>
             </select>
 
             <button type="submit" class="btn-filter-cari">Cari</button>

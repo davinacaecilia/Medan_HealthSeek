@@ -130,7 +130,6 @@ class RumahSakitController extends Controller
         $asuransi = $request->input('asuransi');
         $tipe_rs = $request->input('tipe_rs');
 
-
         $detectedClass = null;
         $cleanQ = '';
         
@@ -162,7 +161,6 @@ class RumahSakitController extends Controller
             $cleanQ = trim($tempQ);
         }
 
-        // Mulai membangun string kueri SPARQL
         $sparqlQuery = '
             SELECT DISTINCT ?id ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
             WHERE {           
@@ -190,13 +188,10 @@ class RumahSakitController extends Controller
                 }
         ';
 
-        // 1. Filter dari Dropdown (Pencarian Presisi)
         if ($request->filled('kecamatan')) {
-            // Jika user memilih Kecamatan spesifik, cari RS di kecamatan itu
             $sparqlQuery .= ' ?rs_id rs:isLocated rs:' . $kecamatan . ' . ';
         } 
         elseif ($request->filled('kota')) {
-            // Jika Kecamatan KOSONG, tapi Kota DIPILIH, cari RS di semua kecamatan milik kota itu
             $sparqlQuery .= ' 
                 ?rs_id rs:isLocated ?kec_cek .
                 ?kec_cek rs:isPartOf rs:' . $kota . ' . 
@@ -209,7 +204,6 @@ class RumahSakitController extends Controller
             $sparqlQuery .= ' ?rs_id rs:acceptsInsurance rs:' . $asuransi . ' . ';
         }
         if ($request->filled('tipe_rs')) {
-            // Pastikan aman dari SPARQL injection sederhana
             $sparqlQuery .= ' ?rs_id rs:tipeRS "' . addslashes($tipe_rs) . '" . ';
         }
 
@@ -219,14 +213,11 @@ class RumahSakitController extends Controller
                 
                 FILTER (
                     CONTAINS(LCASE(?nama), "' . $cleanQ . '") || 
-                    CONTAINS(LCASE(?nama_kecamatan), "' . $cleanQ . '") ||
-                    CONTAINS(LCASE(?nama_kota), "' . $cleanQ . '") ||
                     CONTAINS(LCASE(?labelSpesialisasi), "' . $cleanQ . '")
                 )
             ';
         }
 
-        // Akhiri kueri
         $sparqlQuery .= '
                 BIND(REPLACE(STR(?rs_id), STR(rs:), "") AS ?id)
             } 
@@ -239,7 +230,6 @@ class RumahSakitController extends Controller
             return back()->with('error', 'Gagal terhubung ke server database. Pastikan Fuseki sudah berjalan.');
         }
 
-        // Tampilkan view 'hasil.blade.php' dan kirim data hasilnya
         return view('pencarian', array_merge($dropdownData, [
             'results' => $results,
             'inputs' => $request->all()
@@ -297,7 +287,6 @@ class RumahSakitController extends Controller
             'jenis' => []
         ];
         
-        // Kumpulkan semua data yang berulang
         foreach ($results as $row) {
             if (isset($row['spesialisasi'])) $rs['spesialisasi'][] = $row['spesialisasi']['value'];
             if (isset($row['fasilitas'])) $rs['fasilitas'][] = $row['fasilitas']['value'];

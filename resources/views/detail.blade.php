@@ -51,6 +51,21 @@
                 </ul>
             </section>
 
+             <div class="map-box">
+                <h2>Lokasi di Peta</h3>
+                <div class="gmaps-embed">
+                    
+                    <iframe 
+                        src="{{ $rs['gmaps'] }}" 
+                        width="100%" 
+                        height="300" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+
         </article>
 
         <aside class="detail-sidebar">
@@ -68,21 +83,6 @@
                     {{ $jenis }}
                 @endforeach
                 </p>
-            </div>
-
-            <div class="map-box">
-                <h2>Lokasi di Peta</h3>
-                <div class="gmaps-embed">
-                    
-                    <iframe 
-                        src="{{ $rs['gmaps'] }}" 
-                        width="100%" 
-                        height="300" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy">
-                    </iframe>
-                </div>
             </div>
           
         </aside>
