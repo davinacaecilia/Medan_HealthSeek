@@ -36,25 +36,50 @@
             </select>
 
             <label for="spesialisasi">Spesialisasi</label>
-            <select id="spesialisasi" name="spesialisasi">
-                <option value="">Semua Spesialisasi</option>
+            <div class="custom-select" id="select-spesialisasi">
+            <div class="custom-select-trigger">Semua Spesialisasi</div>
+
+                <div class="custom-options">
+                    <input type="text" class="custom-search" placeholder="Cari spesialisasi...">
+
+                <div class="options-wrapper">
+                    <div class="custom-option" data-value="">Semua Spesialisasi</div>
+
                     @foreach($spesialisasiList as $item)
-                        <option value="{{ $item['id_short']['value'] }}">
+                        <div class="custom-option"
+                            data-value="{{ $item['id_short']['value'] }}">
                             {{ $item['label']['value'] }}
-                        </option>
+                        </div>
                     @endforeach
-            </select>
-           
+                </div>
+            </div>
+
+            <input type="hidden" name="spesialisasi" id="spesialisasi">
+            </div>
+
+
             <label for="kota">Kabupaten / Kota</label>
-            <select id="kota" name="kota">
-                <option value="">Semua Kabupaten/Kota</option>
-                @foreach($kotaList as $item)
-                <option value="{{ $item['id_short']['value'] }}">
-                    {{ $item['label']['value'] }}
-                </option>
-                @endforeach
-            </select>
-            
+            <div class="custom-select" id="select-kota">
+            <div class="custom-select-trigger">Semua Kabupaten/Kota</div>
+
+                <div class="custom-options">
+                    <input type="text" class="custom-search" placeholder="Cari kabupaten/kota...">
+
+                <div class="options-wrapper">
+                    <div class="custom-option" data-value="">Semua Kabupaten/Kota</div>
+
+                    @foreach($kotaList as $item)
+                        <div class="custom-option"
+                        data-value="{{ $item['id_short']['value'] }}">
+                        {{ $item['label']['value'] }}
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <input type="hidden" name="kota" id="kota">
+            </div>
+
             <label for="kecamatan">Kecamatan</label>
             <select id="kecamatan" name="kecamatan" >
                 <option value="">Semua Kecamatan</option>
@@ -105,7 +130,7 @@
     </div>
 
     <footer>
-        <p>© {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
+        <p>© {{ date('Y') }} HealthSeek. All Rights Reserved.</p>
     </footer>
 
     <script>
@@ -120,11 +145,11 @@
 
             // Kosongkan dropdown kecamatan
             kecamatanDropdown.innerHTML = '<option value="">Semua Kecamatan</option>';
-            
+
             if (kotaIdTerpilih) {
                 // 3. FILTER data di memori browser (Tanpa loading ke server)
                 // Cari kecamatan yang 'induk_id'-nya sama dengan kota yang dipilih
-                const kecamatanTersaring = semuaKecamatan.filter(item => 
+                const kecamatanTersaring = semuaKecamatan.filter(item =>
                     item.induk_id.value === kotaIdTerpilih
                 );
 
@@ -202,5 +227,71 @@
 
         showPage(currentPage);
     </script>
+
+    <script>
+document.querySelectorAll('.custom-select').forEach(select => {
+    const trigger = select.querySelector('.custom-select-trigger');
+    const options = select.querySelector('.custom-options');
+    const wrapper = select.querySelector('.options-wrapper');
+    const search = select.querySelector('.custom-search');
+    const hiddenInput = select.querySelector('input[type="hidden"]');
+
+    // buka/tutup + flip
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation(); // biar klik trigger tidak ditangkap document
+        const clone = options.cloneNode(true);
+        clone.style.visibility = 'hidden';
+        clone.style.position = 'absolute';
+        clone.style.display = 'block';
+        document.body.appendChild(clone);
+        const optionsHeight = clone.offsetHeight;
+        document.body.removeChild(clone);
+
+        const rect = trigger.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+
+        if (spaceBelow < optionsHeight && spaceAbove > optionsHeight) {
+            options.classList.add('up');
+            options.classList.remove('down');
+        } else {
+            options.classList.add('down');
+            options.classList.remove('up');
+        }
+
+        select.classList.toggle('open');
+    });
+
+    // pilih opsi
+    wrapper.addEventListener('click', (e) => {
+        if (e.target.classList.contains('custom-option')) {
+            hiddenInput.value = e.target.dataset.value;
+            trigger.textContent = e.target.textContent;
+            select.classList.remove('open');
+        }
+    });
+
+    // search
+    search.addEventListener('input', () => {
+        const term = search.value.toLowerCase();
+        wrapper.querySelectorAll('.custom-option').forEach(opt => {
+            opt.style.display = opt.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+        });
+    });
+
+    // agar klik di dalam dropdown tidak menutupnya
+    options.addEventListener('click', e => e.stopPropagation());
+});
+
+// klik di luar -> tutup dropdown
+document.addEventListener('click', () => {
+    document.querySelectorAll('.custom-select').forEach(select => {
+        select.classList.remove('open');
+    });
+});
+
+</script>
+
+
 </body>
 </html>

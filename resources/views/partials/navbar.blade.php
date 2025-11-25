@@ -1,7 +1,7 @@
 <nav class="navbar">
-    <div class="logo">
-        <img src="{{ asset('logoo.png') }}" alt="Medan HealthSeek Logo">
-    </div>
+    <a href="{{ route('rumahSakit.home') }}" class="logo">
+        <img src="{{ asset('logoo.png') }}" alt="HealthSeek Logo">
+    </a>
 
     <div class="floating-icons">
         <span class="icon">💊</span>
@@ -16,7 +16,7 @@
 
 <style>
     :root {
-  --primary: #7fb77e;
+  --primary: #4c8547ff;
   --secondary: #f9f9f9;
   --dark: #1f2937;
   --light: #ffffff;
@@ -43,12 +43,25 @@
 }
 
 /* Logo Tengah */
-.logo img {
-  height: 80px;
+.logo {
   margin-left: 20px;
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.logo img {
+  height: 80px;
+  cursor: pointer;
+  transition: 0.2s;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
 
 /* Floating Icons */
 .floating-icons {
@@ -81,19 +94,25 @@
 
 /* Tombol Beranda */
 .btn-beranda {
-  color: white;
-  text-decoration: none;
+  background: white;
+  padding: 6px 18px;
+  border-radius: 25px;
   font-weight: 600;
+  color: var(--primary);
+  border: 2px solid white;
+  text-decoration: none;
   font-size: 1rem;
-  transition: 0.3s;
+
   position: absolute;
-  right: 20px;
-  top: 20px;
+  right: 25px;
+  top: 15px;
+
+  transition: 0.3s;
+  z-index: 2;
 }
 
-.btn-beranda:hover,
-.btn-beranda.active {
-  color: #e9f7e9;
-  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+.btn-beranda:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
-    </style>
+</style>
