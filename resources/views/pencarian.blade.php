@@ -37,24 +37,24 @@
 
             <label for="spesialisasi">Spesialisasi</label>
             <div class="custom-select" id="select-spesialisasi">
-            <div class="custom-select-trigger">Semua Spesialisasi</div>
+                <div class="custom-select-trigger">Semua Spesialisasi</div>
 
-                <div class="custom-options">
-                    <input type="text" class="custom-search" placeholder="Cari spesialisasi...">
+                    <div class="custom-options">
+                        <input type="text" class="custom-search" placeholder="Cari spesialisasi...">
 
-                <div class="options-wrapper">
-                    <div class="custom-option" data-value="">Semua Spesialisasi</div>
+                    <div class="options-wrapper">
+                        <div class="custom-option" data-value="">Semua Spesialisasi</div>
 
-                    @foreach($spesialisasiList as $item)
-                        <div class="custom-option"
-                            data-value="{{ $item['id_short']['value'] }}">
-                            {{ $item['label']['value'] }}
-                        </div>
-                    @endforeach
+                        @foreach($spesialisasiList as $item)
+                            <div class="custom-option"
+                                data-value="{{ $item['id_short']['value'] }}">
+                                {{ $item['label']['value'] }}
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
 
-            <input type="hidden" name="spesialisasi" id="spesialisasi">
+                <input type="hidden" name="spesialisasi" id="spesialisasi">
             </div>
 
 
@@ -229,68 +229,67 @@
     </script>
 
     <script>
-document.querySelectorAll('.custom-select').forEach(select => {
-    const trigger = select.querySelector('.custom-select-trigger');
-    const options = select.querySelector('.custom-options');
-    const wrapper = select.querySelector('.options-wrapper');
-    const search = select.querySelector('.custom-search');
-    const hiddenInput = select.querySelector('input[type="hidden"]');
+        document.querySelectorAll('.custom-select').forEach(select => {
+            const trigger = select.querySelector('.custom-select-trigger');
+            const options = select.querySelector('.custom-options');
+            const wrapper = select.querySelector('.options-wrapper');
+            const search = select.querySelector('.custom-search');
+            const hiddenInput = select.querySelector('input[type="hidden"]');
 
-    // buka/tutup + flip
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation(); // biar klik trigger tidak ditangkap document
-        const clone = options.cloneNode(true);
-        clone.style.visibility = 'hidden';
-        clone.style.position = 'absolute';
-        clone.style.display = 'block';
-        document.body.appendChild(clone);
-        const optionsHeight = clone.offsetHeight;
-        document.body.removeChild(clone);
+            // buka/tutup + flip
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation(); // biar klik trigger tidak ditangkap document
+                const clone = options.cloneNode(true);
+                clone.style.visibility = 'hidden';
+                clone.style.position = 'absolute';
+                clone.style.display = 'block';
+                document.body.appendChild(clone);
+                const optionsHeight = clone.offsetHeight;
+                document.body.removeChild(clone);
 
-        const rect = trigger.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const spaceAbove = rect.top;
+                const rect = trigger.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - rect.bottom;
+                const spaceAbove = rect.top;
 
-        if (spaceBelow < optionsHeight && spaceAbove > optionsHeight) {
-            options.classList.add('up');
-            options.classList.remove('down');
-        } else {
-            options.classList.add('down');
-            options.classList.remove('up');
-        }
+                if (spaceBelow < optionsHeight && spaceAbove > optionsHeight) {
+                    options.classList.add('up');
+                    options.classList.remove('down');
+                } else {
+                    options.classList.add('down');
+                    options.classList.remove('up');
+                }
 
-        select.classList.toggle('open');
-    });
+                select.classList.toggle('open');
+            });
 
-    // pilih opsi
-    wrapper.addEventListener('click', (e) => {
-        if (e.target.classList.contains('custom-option')) {
-            hiddenInput.value = e.target.dataset.value;
-            trigger.textContent = e.target.textContent;
-            select.classList.remove('open');
-        }
-    });
+            // pilih opsi
+            wrapper.addEventListener('click', (e) => {
+                if (e.target.classList.contains('custom-option')) {
+                    hiddenInput.value = e.target.dataset.value;
+                    trigger.textContent = e.target.textContent;
+                    select.classList.remove('open');
+                }
+            });
 
-    // search
-    search.addEventListener('input', () => {
-        const term = search.value.toLowerCase();
-        wrapper.querySelectorAll('.custom-option').forEach(opt => {
-            opt.style.display = opt.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+            // search
+            search.addEventListener('input', () => {
+                const term = search.value.toLowerCase();
+                wrapper.querySelectorAll('.custom-option').forEach(opt => {
+                    opt.style.display = opt.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+                });
+            });
+
+            // agar klik di dalam dropdown tidak menutupnya
+            options.addEventListener('click', e => e.stopPropagation());
         });
-    });
 
-    // agar klik di dalam dropdown tidak menutupnya
-    options.addEventListener('click', e => e.stopPropagation());
-});
-
-// klik di luar -> tutup dropdown
-document.addEventListener('click', () => {
-    document.querySelectorAll('.custom-select').forEach(select => {
-        select.classList.remove('open');
-    });
-});
-
-</script>
+        // klik di luar -> tutup dropdown
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-select').forEach(select => {
+                select.classList.remove('open');
+            });
+        });
+    </script>
 
 
 </body>

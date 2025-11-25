@@ -22,8 +22,11 @@
             <span class="icon">❤‍🩹</span>
             <span class="icon">💉</span>
         </div>
-          <div class="logo">
-            <img src="{{ asset('/logoo.png') }}" alt="HealthSeek Logo">
+
+        <div class="logo">
+            <a href="{{ route('rumahSakit.home') }}">
+                <img src="{{ asset('/logoo.png') }}" alt="HealthSeek Logo">
+            </a>
         </div>
 
         <nav class="nav">

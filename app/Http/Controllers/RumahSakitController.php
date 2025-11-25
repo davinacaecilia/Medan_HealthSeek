@@ -251,7 +251,7 @@ class RumahSakitController extends Controller
                 OPTIONAL {
                     ?rs_id rdf:type ?kelas_rs .       
                     ?kelas_rs rdfs:subClassOf* rs:RumahSakit . 
-                    FILTER(?kelas_rs != rs:RumahSsakit)        
+                    FILTER(?kelas_rs != rs:RumahSakit)        
                     ?kelas_rs rdfs:label ?jenis_rs .  
                 }
                 

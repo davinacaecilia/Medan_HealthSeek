@@ -1,6 +1,6 @@
 /* Variabel */
 :root {
-  --primary: #7fb77e;
+  --primary: #4c8547ff;
   --secondary: #f9f9f9;
   --dark: #1f2937;
   --light: #ffffff;
@@ -76,18 +76,27 @@ body {
   z-index: 3;
 }
 
-.nav-link {
-  color: white;
-  text-decoration: none;
+.nav-link.active {
+  background: white;
+  padding: 6px 18px;
+  border-radius: 25px;
   font-weight: 600;
+  color: var(--primary);
+  border: 2px solid white;
+  text-decoration: none;
   font-size: 1rem;
+
+  position: absolute;
+  right: 25px;
+  top: 15px;
+
   transition: 0.3s;
+  z-index: 2;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #e9f7e9;
-  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+.nav-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 /* Search dan filter section */
@@ -510,12 +519,19 @@ main {
     position: absolute;
     top: 20px;          
     left: 20px;        
-    z-index: 1000;      
+    z-index: 1000;
+    cursor: pointer;
+    transition: 0.2s;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));  
 }
 
 .logo img {
     height: 95px;       
     width: auto;
+}
+
+.logo img:hover {
+  transform: scale(1.05);
 }
 
 /* Posisi nav di kanan atas */
