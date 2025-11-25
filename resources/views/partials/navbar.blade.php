@@ -11,7 +11,7 @@
     </div>
 
     <!-- Tombol Beranda -->
-    <a href="{{ route('home') }}" class="btn-beranda">Beranda</a>
+    <a href="{{ route('rumahSakit.home') }}" class="btn-beranda">Beranda</a>
 </nav>
 
 <style>

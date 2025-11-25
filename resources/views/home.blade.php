@@ -37,7 +37,7 @@
                 <!-- Baris pencarian -->
             <form method="GET" action="{{ route('rumahSakit.list') }}" class="search-box">
                 <div class="searching">
-                    <input type="text" id="search" name="q" placeholder="Cari rumah sakit..." value="{{ $keyword ?? '' }}">
+                    <input type="text" id="search" name="q" placeholder="Cari nama atau jenis rumah sakit..." value="{{ $keyword ?? '' }}">
                     <button type="submit">Cari</button>
                 </div>
 
@@ -71,21 +71,19 @@
                 </div>
                 <div class="filter-bottom">
 
-            <!-- Kabupaten/Kota -->
-            <select id="kota" name="kota">
-                <option value="">Semua Kabupaten/Kota</option>
-                @foreach($kotaList as $item)
-                    <option value="{{ $item['id_short']['value'] }}">
-                        {{ $item['label']['value'] }}
-                    </option>
-                @endforeach
-            </select>
+                    <select id="kota" name="kota">
+                        <option value="">Semua Kabupaten/Kota</option>
+                        @foreach($kotaList as $item)
+                            <option value="{{ $item['id_short']['value'] }}">
+                                {{ $item['label']['value'] }}
+                            </option>
+                        @endforeach
+                    </select>
 
-            <!-- Kecamatan (akan dinamis sesuai kabupaten) -->
-            <select id="kecamatan" name="kecamatan" >
-                <option value="">Semua Kecamatan</option>
-            </select>
-        </div>
+                    <select id="kecamatan" name="kecamatan" >
+                        <option value="">Semua Kecamatan</option>
+                    </select>
+                </div>
         </header>
 
     <!-- ===== MAIN CONTENT ===== -->
