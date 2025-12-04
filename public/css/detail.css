@@ -65,12 +65,32 @@ body {
   height: auto;
 }
 
+.detail-image-container {
+  width: 100%;
+}
+
+.detail-image-container img {
+  width: 100%;
+  height: 300px; /* Tinggi gambar fixed biar rapi */
+  object-fit: cover; /* Biar gambar gak gepeng */
+  border-radius: var(--radius);
+}
+
+.detail-image-container figcaption {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 /* Header Judul */
 .detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   border-bottom: 2px solid #eee;
   padding-bottom: 1rem;
 }
@@ -168,8 +188,6 @@ body {
   font-size: 1.4rem;
   color: var(--dark);
   margin-bottom: 0.75rem;
-  border-left: 5px solid var(--primary);
-  padding-left: 10px;
 }
 
 .gmaps-embed iframe {

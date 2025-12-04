@@ -13,6 +13,16 @@
     <main class="container">
 
         <article class="detail-content">
+            <figure class="detail-image-container">
+                @if($rs['gbr'])
+                    <img src={{ $rs['gbr'] }} alt={{ $rs['nama'] }}>
+                    <figcaption>Tampak Depan Rumah Sakit</figcaption>
+                @else
+                    <img src="https://operaparallele.org/wp-content/uploads/2023/09/Placeholder_Image.png" alt={{ $rs['nama'] }}>
+                    <figcaption>Gambar Tidak Tersedia</figcaption>
+                @endif
+            </figure>
+
             <header class="detail-header">
                 <h1>{{ $rs['nama'] }}</h1>
                 <span class="tipe-rs tipe-{{ strtolower($rs['tipe']) }}">{{ $rs['tipe'] }}</span>
@@ -50,22 +60,6 @@
                     @endforelse
                 </ul>
             </section>
-
-             <div class="map-box">
-                <h2>Lokasi di Peta</h3>
-                <div class="gmaps-embed">
-
-                    <iframe
-                        src="{{ $rs['gmaps'] }}"
-                        width="100%"
-                        height="300"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy">
-                    </iframe>
-                </div>
-            </div>
-
         </article>
 
         <aside class="detail-sidebar">
@@ -85,8 +79,26 @@
                 </p>
             </div>
 
+            <div class="map-box">
+                <h2>Lokasi di Peta</h3>
+                <div class="gmaps-embed">
+
+                    <iframe
+                        src="{{ $rs['gmaps'] }}"
+                        width="100%"
+                        height="300"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+
         </aside>
     </main>
+
+    @include('partials.chatbot')
+
     <footer>
         <p>© {{ date('Y') }} HealthSeek. All Rights Reserved.</p>
     </footer>
