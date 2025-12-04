@@ -9,7 +9,6 @@
 </head>
 <body>
 
-
     <!-- Hero Section -->
     <header class="hero">
         <div class="floating-icons">
@@ -22,8 +21,11 @@
             <span class="icon">❤‍🩹</span>
             <span class="icon">💉</span>
         </div>
-          <div class="logo">
-            <img src="{{ asset('/logoo.png') }}" alt="HealthSeek Logo">
+
+        <div class="logo">
+            <a href="{{ route('rumahSakit.home') }}">
+                <img src="{{ asset('/logoo.png') }}" alt="HealthSeek Logo">
+            </a>
         </div>
 
         <nav class="nav">
@@ -122,6 +124,8 @@
         </div>
     @endif
 
+    @include('partials.chatbot')
+
     <footer>
         <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
     </footer>
@@ -132,21 +136,16 @@
         const kotaDropdown = document.getElementById('kota');
         const kecamatanDropdown = document.getElementById('kecamatan');
 
-        // 2. Event saat Kota dipilih
         kotaDropdown.addEventListener('change', function() {
             const kotaIdTerpilih = this.value;
 
-            // Kosongkan dropdown kecamatan
             kecamatanDropdown.innerHTML = '<option value="">Semua Kecamatan</option>';
             
             if (kotaIdTerpilih) {
-                // 3. FILTER data di memori browser (Tanpa loading ke server)
-                // Cari kecamatan yang 'induk_id'-nya sama dengan kota yang dipilih
                 const kecamatanTersaring = semuaKecamatan.filter(item => 
                     item.induk_id.value === kotaIdTerpilih
                 );
 
-                // Masukkan hasil filter ke dropdown
                 kecamatanTersaring.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.id_short.value;
@@ -161,5 +160,6 @@
             }
         });
     </script>
+
 </body>
 </html>

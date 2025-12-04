@@ -249,9 +249,13 @@ class RumahSakitController extends Controller
                 ?rs_id rs:linkGmaps ?gmaps .
 
                 OPTIONAL {
+                    ?rs_id rs:linkGbr ?gbr .
+                }
+
+                OPTIONAL {
                     ?rs_id rdf:type ?kelas_rs .       
                     ?kelas_rs rdfs:subClassOf* rs:RumahSakit . 
-                    FILTER(?kelas_rs != rs:RumahSsakit)        
+                    FILTER(?kelas_rs != rs:RumahSakit)        
                     ?kelas_rs rdfs:label ?jenis_rs .  
                 }
                 
@@ -281,6 +285,7 @@ class RumahSakitController extends Controller
             'alamat' => $results[0]['alamat']['value'],
             'telepon' => $results[0]['telepon']['value'],
             'gmaps' => $results[0]['gmaps']['value'],
+            'gbr' => $results[0]['gbr']['value'] ?? null,
             'spesialisasi' => [],
             'fasilitas' => [],
             'asuransi' => [],
@@ -300,5 +305,115 @@ class RumahSakitController extends Controller
         $rs['jenis'] = array_unique($rs['jenis']);
         
         return view('detail', ['rs' => $rs]);
+    }
+
+    private function detectSymptom($text)
+    {
+        $text = strtolower($text);
+        $rules = config('symptoms'); 
+        
+        if (!$rules) return [];
+
+        $foundSpecializations = [];
+
+        foreach ($rules as $keyword => $specializationID) {
+            if (str_contains($text, $keyword)) {
+                $foundSpecializations[] = $specializationID;
+            }
+        }
+
+        return array_unique($foundSpecializations); 
+    }
+
+    public function chat(Request $request)
+    {
+        $message = strtolower($request->input('message'));
+        
+        $symptomSpecs = $this->detectSymptom($message);
+
+        if (empty($symptomSpecs)) {
+            if (str_contains($message, 'halo') || str_contains($message, 'hai')) {
+                return response()->json([
+                    'reply' => "Haloww! Aku asisten medis HealthSeek, <strong>EIMI</strong>. <br><br> Ceritain aja keluhan kamu (contoh: 'mata buram' atau 'demam'), aku bakal carikan Rumah Sakit yang cocok buat kamu!",
+                    'recommendations' => []
+                ]);
+            }
+            return response()->json([
+                'reply' => "Maaf, aku masih belum mengerti gejala yang kamu bilang 😔<br><br> Coba pakai kata kunci yang lebih umum, dan aku bakalan cari Rumah Sakit yang sesuai kebutuhan kamu!",
+                'recommendations' => []
+            ]);
+        }
+
+        $isGeneralSymptom = in_array('Umum', $symptomSpecs);
+        
+        $rankingLogic = '';
+
+        if ($isGeneralSymptom) {
+            $rankingLogic = '
+                BIND(
+                    IF(EXISTS { 
+                        ?rs rdf:type ?cek_tipe . 
+                        ?cek_tipe rdfs:subClassOf* rs:RSU 
+                    }, 1, 2) 
+                AS ?rank)
+            ';
+        } else {
+            $rankingLogic = '
+                BIND(
+                    IF(EXISTS { 
+                        ?rs rdf:type ?cek_tipe . 
+                        ?cek_tipe rdfs:subClassOf* rs:RSK 
+                    }, 1, 2) 
+                AS ?rank)
+            ';
+        }
+
+        $sparqlList = [];
+        foreach($symptomSpecs as $spec) {
+            $sparqlList[] = "rs:" . $spec;
+        }
+        $sparqlInString = implode(', ', $sparqlList); 
+
+        $sparqlQuery = '
+            SELECT DISTINCT ?nama ?id ?tipe
+            WHERE {
+                ?rs rdf:type ?type . ?type rdfs:subClassOf* rs:RumahSakit .
+                ?rs rs:namaRS ?nama .
+                ?rs rs:tipeRS ?tipe .
+                
+                # Cari yang punya spesialisasi terkait gejala
+                ?rs rs:hasSpecialization ?spec .
+                FILTER (?spec IN (' . $sparqlInString . '))
+
+                # --- MASUKKAN LOGIKA RANKING DINAMIS DI SINI ---
+                ' . $rankingLogic . '
+                # -----------------------------------------------
+
+                BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
+            }
+            # Urutkan: Rank (Sesuai Strategi) -> Tipe (A ke D) -> Nama
+            ORDER BY ASC(?rank) ASC(?tipe) ASC(?nama)
+            LIMIT 5 
+        ';
+
+        $results = $this->queryFuseki($sparqlQuery);
+
+        if (!empty($results)) {
+            $specsText = implode(', ', $symptomSpecs);
+            
+            $introText = $isGeneralSymptom 
+                ? "Untuk keluhan seperti itu, ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu!"
+                : "Sepertinya kamu butuh penanganan di spesialis <strong>$specsText</strong>!<br><br> Ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu";
+
+            return response()->json([
+                'reply' => $introText,
+                'recommendations' => $results 
+            ]);
+        } else {
+            return response()->json([
+                'reply' => "Aku mendeteksi gejala <strong>" . implode(', ', $symptomSpecs) . "</strong>, namun sayangnya untuk saat ini belum ada data Rumah Sakit yang cocok di database 😔",
+                'recommendations' => []
+            ]);
+        }
     }
 }
