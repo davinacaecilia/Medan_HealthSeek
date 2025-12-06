@@ -1,16 +1,6 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Kamus Gejala Medis
-    |--------------------------------------------------------------------------
-    |
-    | Format: 'kata kunci gejala' => 'ID_Spesialisasi_di_Ontology'
-    | Pastikan ID Spesialisasi SAMA PERSIS dengan di Protégé.
-    |
-    */
-
     // 1. Kardiologi (Jantung)
     'jantung' => 'Kardiologi',
     'berdebar' => 'Kardiologi',
