@@ -334,12 +334,14 @@ class RumahSakitController extends Controller
         if (empty($symptomSpecs)) {
             if (str_contains($message, 'halo') || str_contains($message, 'hai')) {
                 return response()->json([
-                    'reply' => "Haloww! Aku asisten medis HealthSeek, <strong>EIMI</strong>. <br><br> Ceritain aja keluhan kamu (contoh: 'mata buram' atau 'demam'), aku bakal carikan Rumah Sakit yang cocok buat kamu!",
+                    'reply' => "Haloww! Aku asisten medis HealthSeek, <strong>EIMI</strong>. <br><br> 
+                    Ceritain aja keluhan kamu (contoh: 'mata buram' atau 'demam'), aku bakal carikan Rumah Sakit yang cocok buat kamu!",
                     'recommendations' => []
                 ]);
             }
             return response()->json([
-                'reply' => "Maaf, aku masih belum mengerti gejala yang kamu bilang 😔<br><br> Coba pakai kata kunci yang lebih umum, dan aku bakalan cari Rumah Sakit yang sesuai kebutuhan kamu!",
+                'reply' => "Maaf, aku masih belum mengerti gejala yang kamu bilang 😔<br><br> 
+                Coba pakai kata kunci yang lebih umum, dan aku bakalan cari Rumah Sakit yang sesuai kebutuhan kamu!",
                 'recommendations' => []
             ]);
         }
@@ -381,17 +383,13 @@ class RumahSakitController extends Controller
                 ?rs rs:namaRS ?nama .
                 ?rs rs:tipeRS ?tipe .
                 
-                # Cari yang punya spesialisasi terkait gejala
                 ?rs rs:hasSpecialization ?spec .
                 FILTER (?spec IN (' . $sparqlInString . '))
 
-                # --- MASUKKAN LOGIKA RANKING DINAMIS DI SINI ---
                 ' . $rankingLogic . '
-                # -----------------------------------------------
 
                 BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
             }
-            # Urutkan: Rank (Sesuai Strategi) -> Tipe (A ke D) -> Nama
             ORDER BY ASC(?rank) ASC(?tipe) ASC(?nama)
             LIMIT 5 
         ';
@@ -403,7 +401,8 @@ class RumahSakitController extends Controller
             
             $introText = $isGeneralSymptom 
                 ? "Untuk keluhan seperti itu, ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu!"
-                : "Sepertinya kamu butuh penanganan di spesialis <strong>$specsText</strong>!<br><br> Ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu";
+                : "Sepertinya kamu butuh penanganan di spesialis <strong>$specsText</strong>!<br><br> 
+                Ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu";
 
             return response()->json([
                 'reply' => $introText,
@@ -411,7 +410,8 @@ class RumahSakitController extends Controller
             ]);
         } else {
             return response()->json([
-                'reply' => "Aku mendeteksi gejala <strong>" . implode(', ', $symptomSpecs) . "</strong>, namun sayangnya untuk saat ini belum ada data Rumah Sakit yang cocok di database 😔",
+                'reply' => "Aku mendeteksi gejala <strong>" . implode(', ', $symptomSpecs) . "</strong>, 
+                namun sayangnya untuk saat ini belum ada data Rumah Sakit yang cocok di database 😔",
                 'recommendations' => []
             ]);
         }

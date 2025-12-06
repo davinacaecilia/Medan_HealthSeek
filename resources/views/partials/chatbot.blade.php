@@ -85,7 +85,6 @@
         messages.innerHTML += `<div class="message bot" id="${loadingId}">...</div>`;
         messages.scrollTop = messages.scrollHeight;
 
-        // 3. Kirim ke Server
         fetch("{{ route('api.chat') }}", {
             method: 'POST',
             headers: {
