@@ -12,6 +12,7 @@
 
     <!-- Tombol Beranda -->
     <a href="{{ route('rumahSakit.home') }}" class="btn-beranda">Beranda</a>
+    <a href="{{ route('rumahSakit.terdekat') }}" class="btn-terdekat">Terdekat</a>
 </nav>
 
 <style>
@@ -115,4 +116,28 @@
   transform: scale(1.05);
   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
+
+.btn-terdekat {
+  background: white;
+  padding: 6px 18px;
+  border-radius: 25px;
+  font-weight: 600;
+  color: var(--primary);
+  border: 2px solid white;
+  text-decoration: none;
+  font-size: 1rem;
+
+  position: absolute;
+  right: 145px;  /* posisi di kiri tombol Beranda */
+  top: 15px;
+
+  transition: 0.3s;
+  z-index: 2;
+}
+
+.btn-terdekat:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
 </style>

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class RumahSakitController extends Controller
 {
-    private $fusekiEndpoint = 'http://localhost:3030/rumahsakit/query'; 
+    private $fusekiEndpoint = 'http://localhost:3030/rumahsakit/query';
     private $prefix = '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -26,10 +26,10 @@ class RumahSakitController extends Controller
             if ($response->successful()) {
                 return $response->json()['results']['bindings'];
             }
-            return []; 
+            return [];
 
         } catch (\Exception $e) {
-            report($e); 
+            report($e);
             return null;
         }
     }
@@ -51,12 +51,12 @@ class RumahSakitController extends Controller
                 ?id rdf:type rs:Kecamatan .
                 ?id rdfs:label ?label .
                 ?id rs:isPartOf ?induk .
-                
+
                 BIND(REPLACE(STR(?id), STR(rs:), "") AS ?id_short)
                 BIND(REPLACE(STR(?induk), STR(rs:), "") AS ?induk_id)
             } ORDER BY ?label
         ';
-        
+
         $spesialisasiQuery = '
             SELECT ?id_short ?label
             WHERE {
@@ -93,21 +93,21 @@ class RumahSakitController extends Controller
             WHERE {
                 ?rs rdf:type ?class .
                 ?class rdfs:subClassOf* rs:RumahSakit .
-                
+
                 ?rs rs:namaRS ?nama .
                 ?rs rs:tipeRS ?tipe .
                 ?rs rs:noTelp ?noTelp .
 
-                OPTIONAL { 
+                OPTIONAL {
                     ?rs rs:isLocated ?kec_id .
                     ?kec_id rdfs:label ?nama_kecamatan .
-                    
+
                     OPTIONAL {
                         ?kec_id rs:isPartOf ?kota_id .
                         ?kota_id rdfs:label ?nama_kota .
                     }
                 }
-                
+
                 BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
             }
             ORDER BY RAND()
@@ -123,7 +123,7 @@ class RumahSakitController extends Controller
 
     public function search(Request $request)
     {
-        $q = $request->input('q'); 
+        $q = $request->input('q');
         $kota = $request->input('kota');
         $kecamatan = $request->input('kecamatan');
         $spesialisasi = $request->input('spesialisasi');
@@ -132,7 +132,7 @@ class RumahSakitController extends Controller
 
         $detectedClass = null;
         $cleanQ = '';
-        
+
         if ($request->filled('q')) {
             $tempQ = strtolower($q);
 
@@ -149,10 +149,10 @@ class RumahSakitController extends Controller
                 $detectedClass = 'rs:RSBedah';
                 $tempQ = str_replace(['rumah sakit bedah', 'rs bedah', 'bedah'], '', $tempQ);
             } elseif (preg_match('/\brsj\b/', $tempQ) || str_contains($tempQ, 'rumah sakit jiwa') || (str_contains($tempQ, 'jiwa') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit')))) {
-                $detectedClass = 'rs:RSJiwa'; 
+                $detectedClass = 'rs:RSJiwa';
                 $tempQ = str_replace(['rumah sakit jiwa', 'rs jiwa', 'rsj', 'jiwa'], '', $tempQ);
             } elseif (str_contains($tempQ, 'ginjal') && (str_contains($tempQ, 'rs') || str_contains($tempQ, 'sakit') || str_contains($tempQ, 'khusus'))) {
-                $detectedClass = 'rs:RSGinjal'; 
+                $detectedClass = 'rs:RSGinjal';
                 $tempQ = str_replace(['rumah sakit ginjal', 'rs ginjal', 'rs khusus ginjal', 'khusus ginjal', 'ginjal'], '', $tempQ);
             }
 
@@ -163,7 +163,7 @@ class RumahSakitController extends Controller
 
         $sparqlQuery = '
             SELECT DISTINCT ?id ?nama ?tipe ?noTelp ?nama_kecamatan ?nama_kota
-            WHERE {           
+            WHERE {
         ';
 
         if ($detectedClass) {
@@ -177,10 +177,10 @@ class RumahSakitController extends Controller
                 ?rs_id rs:tipeRS ?tipe .
                 ?rs_id rs:noTelp ?noTelp .
 
-                OPTIONAL { 
+                OPTIONAL {
                     ?rs_id rs:isLocated ?kec_id .
                     ?kec_id rdfs:label ?nama_kecamatan .
-                    
+
                     OPTIONAL {
                         ?kec_id rs:isPartOf ?kota_id .
                         ?kota_id rdfs:label ?nama_kota .
@@ -190,11 +190,11 @@ class RumahSakitController extends Controller
 
         if ($request->filled('kecamatan')) {
             $sparqlQuery .= ' ?rs_id rs:isLocated rs:' . $kecamatan . ' . ';
-        } 
+        }
         elseif ($request->filled('kota')) {
-            $sparqlQuery .= ' 
+            $sparqlQuery .= '
                 ?rs_id rs:isLocated ?kec_cek .
-                ?kec_cek rs:isPartOf rs:' . $kota . ' . 
+                ?kec_cek rs:isPartOf rs:' . $kota . ' .
             ';
         }
         if ($request->filled('spesialisasi')) {
@@ -210,9 +210,9 @@ class RumahSakitController extends Controller
         if ($cleanQ !== '') {
             $sparqlQuery .= '
                 OPTIONAL { ?rs_id rs:hasSpecialization ?spec_id . ?spec_id rdfs:label ?labelSpesialisasi . }
-                
+
                 FILTER (
-                    CONTAINS(LCASE(?nama), "' . $cleanQ . '") || 
+                    CONTAINS(LCASE(?nama), "' . $cleanQ . '") ||
                     CONTAINS(LCASE(?labelSpesialisasi), "' . $cleanQ . '")
                 )
             ';
@@ -220,7 +220,7 @@ class RumahSakitController extends Controller
 
         $sparqlQuery .= '
                 BIND(REPLACE(STR(?rs_id), STR(rs:), "") AS ?id)
-            } 
+            }
         ';
 
         $results = $this->queryFuseki($sparqlQuery);
@@ -241,7 +241,7 @@ class RumahSakitController extends Controller
         $sparqlQuery = '
             SELECT * WHERE {
                 BIND(rs:' . $id . ' AS ?rs_id)
-                
+
                 ?rs_id rs:namaRS ?nama .
                 ?rs_id rs:tipeRS ?tipe .
                 ?rs_id rs:alamat ?alamat .
@@ -253,20 +253,20 @@ class RumahSakitController extends Controller
                 }
 
                 OPTIONAL {
-                    ?rs_id rdf:type ?kelas_rs .       
-                    ?kelas_rs rdfs:subClassOf* rs:RumahSakit . 
-                    FILTER(?kelas_rs != rs:RumahSakit)        
-                    ?kelas_rs rdfs:label ?jenis_rs .  
+                    ?rs_id rdf:type ?kelas_rs .
+                    ?kelas_rs rdfs:subClassOf* rs:RumahSakit .
+                    FILTER(?kelas_rs != rs:RumahSakit)
+                    ?kelas_rs rdfs:label ?jenis_rs .
                 }
-                
-                ?rs_id rs:hasSpecialization ?spec_id . 
-                ?spec_id rdfs:label ?spesialisasi . 
-                
-                ?rs_id rs:providesFacility ?fac_id . 
-                ?fac_id rdfs:label ?fasilitas . 
 
-                ?rs_id rs:acceptsInsurance ?ins_id . 
-                ?ins_id rdfs:label ?asuransi . 
+                ?rs_id rs:hasSpecialization ?spec_id .
+                ?spec_id rdfs:label ?spesialisasi .
+
+                ?rs_id rs:providesFacility ?fac_id .
+                ?fac_id rdfs:label ?fasilitas .
+
+                ?rs_id rs:acceptsInsurance ?ins_id .
+                ?ins_id rdfs:label ?asuransi .
             }
         ';
         $results = $this->queryFuseki($sparqlQuery);
@@ -291,7 +291,7 @@ class RumahSakitController extends Controller
             'asuransi' => [],
             'jenis' => []
         ];
-        
+
         foreach ($results as $row) {
             if (isset($row['spesialisasi'])) $rs['spesialisasi'][] = $row['spesialisasi']['value'];
             if (isset($row['fasilitas'])) $rs['fasilitas'][] = $row['fasilitas']['value'];
@@ -303,15 +303,15 @@ class RumahSakitController extends Controller
         $rs['fasilitas'] = array_unique($rs['fasilitas']);
         $rs['asuransi'] = array_unique($rs['asuransi']);
         $rs['jenis'] = array_unique($rs['jenis']);
-        
+
         return view('detail', ['rs' => $rs]);
     }
 
     private function detectSymptom($text)
     {
         $text = strtolower($text);
-        $rules = config('symptoms'); 
-        
+        $rules = config('symptoms');
+
         if (!$rules) return [];
 
         $foundSpecializations = [];
@@ -322,50 +322,50 @@ class RumahSakitController extends Controller
             }
         }
 
-        return array_unique($foundSpecializations); 
+        return array_unique($foundSpecializations);
     }
 
     public function chat(Request $request)
     {
         $message = strtolower($request->input('message'));
-        
+
         $symptomSpecs = $this->detectSymptom($message);
 
         if (empty($symptomSpecs)) {
             if (str_contains($message, 'halo') || str_contains($message, 'hai')) {
                 return response()->json([
-                    'reply' => "Haloww! Aku asisten medis HealthSeek, <strong>EIMI</strong>. <br><br> 
+                    'reply' => "Haloww! Aku asisten medis HealthSeek, <strong>EIMI</strong>. <br><br>
                     Ceritain aja keluhan kamu (contoh: 'mata buram' atau 'demam'), aku bakal carikan Rumah Sakit yang cocok buat kamu!",
                     'recommendations' => []
                 ]);
             }
             return response()->json([
-                'reply' => "Maaf, aku masih belum mengerti gejala yang kamu bilang 😔<br><br> 
+                'reply' => "Maaf, aku masih belum mengerti gejala yang kamu bilang 😔<br><br>
                 Coba pakai kata kunci yang lebih umum, dan aku bakalan cari Rumah Sakit yang sesuai kebutuhan kamu!",
                 'recommendations' => []
             ]);
         }
 
         $isGeneralSymptom = in_array('Umum', $symptomSpecs);
-        
+
         $rankingLogic = '';
 
         if ($isGeneralSymptom) {
             $rankingLogic = '
                 BIND(
-                    IF(EXISTS { 
-                        ?rs rdf:type ?cek_tipe . 
-                        ?cek_tipe rdfs:subClassOf* rs:RSU 
-                    }, 1, 2) 
+                    IF(EXISTS {
+                        ?rs rdf:type ?cek_tipe .
+                        ?cek_tipe rdfs:subClassOf* rs:RSU
+                    }, 1, 2)
                 AS ?rank)
             ';
         } else {
             $rankingLogic = '
                 BIND(
-                    IF(EXISTS { 
-                        ?rs rdf:type ?cek_tipe . 
-                        ?cek_tipe rdfs:subClassOf* rs:RSK 
-                    }, 1, 2) 
+                    IF(EXISTS {
+                        ?rs rdf:type ?cek_tipe .
+                        ?cek_tipe rdfs:subClassOf* rs:RSK
+                    }, 1, 2)
                 AS ?rank)
             ';
         }
@@ -374,7 +374,7 @@ class RumahSakitController extends Controller
         foreach($symptomSpecs as $spec) {
             $sparqlList[] = "rs:" . $spec;
         }
-        $sparqlInString = implode(', ', $sparqlList); 
+        $sparqlInString = implode(', ', $sparqlList);
 
         $sparqlQuery = '
             SELECT DISTINCT ?nama ?id ?tipe
@@ -382,7 +382,7 @@ class RumahSakitController extends Controller
                 ?rs rdf:type ?type . ?type rdfs:subClassOf* rs:RumahSakit .
                 ?rs rs:namaRS ?nama .
                 ?rs rs:tipeRS ?tipe .
-                
+
                 ?rs rs:hasSpecialization ?spec .
                 FILTER (?spec IN (' . $sparqlInString . '))
 
@@ -391,29 +391,33 @@ class RumahSakitController extends Controller
                 BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
             }
             ORDER BY ASC(?rank) ASC(?tipe) ASC(?nama)
-            LIMIT 5 
+            LIMIT 5
         ';
 
         $results = $this->queryFuseki($sparqlQuery);
 
         if (!empty($results)) {
             $specsText = implode(', ', $symptomSpecs);
-            
-            $introText = $isGeneralSymptom 
+
+            $introText = $isGeneralSymptom
                 ? "Untuk keluhan seperti itu, ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu!"
-                : "Sepertinya kamu butuh penanganan di spesialis <strong>$specsText</strong>!<br><br> 
+                : "Sepertinya kamu butuh penanganan di spesialis <strong>$specsText</strong>!<br><br>
                 Ini aku kasih beberapa rekomendasi Rumah Sakit buat kamu";
 
             return response()->json([
                 'reply' => $introText,
-                'recommendations' => $results 
+                'recommendations' => $results
             ]);
         } else {
             return response()->json([
-                'reply' => "Aku mendeteksi gejala <strong>" . implode(', ', $symptomSpecs) . "</strong>, 
+                'reply' => "Aku mendeteksi gejala <strong>" . implode(', ', $symptomSpecs) . "</strong>,
                 namun sayangnya untuk saat ini belum ada data Rumah Sakit yang cocok di database 😔",
                 'recommendations' => []
             ]);
         }
+    }
+
+        public function terdekat() {
+        return view('terdekat');
     }
 }

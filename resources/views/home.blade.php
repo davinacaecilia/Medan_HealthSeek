@@ -29,7 +29,8 @@
         </div>
 
         <nav class="nav">
-            <a href="{{ route('rumahSakit.home') }}" class="nav-link active">Beranda</a>
+            <a href="{{ route('rumahSakit.terdekat') }}" class="nav-link">Terdekat</a>
+            <a href="{{ route('rumahSakit.home') }}" class="nav-link">Beranda</a>
         </nav>
 
         <div class="hero-content">
@@ -116,7 +117,7 @@
                 <p>Tidak ada data rumah sakit ditemukan.</p>
             </div>
         @endforelse
-    </main>  
+    </main>
 
     @if (count($featuredHospitals) >= 1)
         <div class="see-more">
@@ -140,9 +141,9 @@
             const kotaIdTerpilih = this.value;
 
             kecamatanDropdown.innerHTML = '<option value="">Semua Kecamatan</option>';
-            
+
             if (kotaIdTerpilih) {
-                const kecamatanTersaring = semuaKecamatan.filter(item => 
+                const kecamatanTersaring = semuaKecamatan.filter(item =>
                     item.induk_id.value === kotaIdTerpilih
                 );
 
