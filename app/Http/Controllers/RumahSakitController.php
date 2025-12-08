@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 class RumahSakitController extends Controller
 {
     private $fusekiEndpoint = 'http://localhost:3030/rumahsakit/query';
+    
+    // Prefix Namespace untuk SPARQL
     private $prefix = '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -248,6 +250,11 @@ class RumahSakitController extends Controller
                 ?rs_id rs:noTelp ?telepon .
                 ?rs_id rs:linkGmaps ?gmaps .
 
+                # --- TAMBAHAN: Ambil Koordinat (Sesuai RDF rs:lat dan rs:long) ---
+                OPTIONAL { ?rs_id rs:lat ?lat . }
+                OPTIONAL { ?rs_id rs:long ?long . }
+                # -------------------------------------------------------------
+
                 OPTIONAL {
                     ?rs_id rs:linkGbr ?gbr .
                 }
@@ -286,6 +293,12 @@ class RumahSakitController extends Controller
             'telepon' => $results[0]['telepon']['value'],
             'gmaps' => $results[0]['gmaps']['value'],
             'gbr' => $results[0]['gbr']['value'] ?? null,
+            
+            // --- TAMBAHAN: Masukkan ke Array agar bisa dibaca View ---
+            'lat' => isset($results[0]['lat']) ? (float)$results[0]['lat']['value'] : null,
+            'lng' => isset($results[0]['long']) ? (float)$results[0]['long']['value'] : null,
+            // -------------------------------------------------------
+
             'spesialisasi' => [],
             'fasilitas' => [],
             'asuransi' => [],
@@ -417,7 +430,44 @@ class RumahSakitController extends Controller
         }
     }
 
-        public function terdekat() {
-        return view('terdekat');
+    // UPDATED: Fungsi Terdekat dengan Koordinat
+    
+    public function terdekat()
+    {
+        $sparqlQuery = '
+            SELECT ?id ?nama ?tipe ?noTelp ?lat ?long
+            WHERE {
+                ?rs rdf:type ?type . ?type rdfs:subClassOf* rs:RumahSakit .
+                ?rs rs:namaRS ?nama .
+                ?rs rs:tipeRS ?tipe .
+                ?rs rs:noTelp ?noTelp .
+                
+                # Mengambil Koordinat dari Fuseki (Nama properti sesuai RDF)
+                OPTIONAL { ?rs rs:lat ?lat . }
+                OPTIONAL { ?rs rs:long ?long . }
+
+                BIND(REPLACE(STR(?rs), STR(rs:), "") AS ?id)
+            }
+        ';
+
+        $results = $this->queryFuseki($sparqlQuery);
+        $cleanData = [];
+
+        if ($results) {
+            foreach ($results as $row) {
+                if (isset($row['lat']) && isset($row['long'])) {
+                    $cleanData[] = [
+                        'id' => $row['id']['value'],
+                        'nama' => $row['nama']['value'],
+                        'tipe' => $row['tipe']['value'],
+                        'telp' => $row['noTelp']['value'],
+                        'lat' => (float) $row['lat']['value'],
+                        'lng' => (float) $row['long']['value']
+                    ];
+                }
+            }
+        }
+
+        return view('terdekat', ['allHospitals' => $cleanData]);
     }
 }

@@ -128,6 +128,15 @@
     @include('partials.chatbot')
 
     <footer>
+        <!-- ini tuh buat mini statistik ada berapa kabupaten dan berapa spesialis. kalo mau hapus gapapa.  -->
+        <div class="stats-container" style="display:flex; gap:20px; justify-content:center; margin-top:20px; color:white;">
+        <div class="stat-item">
+            <strong style="font-size:1.5rem;">{{ count($kotaList) }}</strong><br> Kab/Kota
+        </div>
+        <div class="stat-item">
+            <strong style="font-size:1.5rem;">{{ count($spesialisasiList) }}</strong><br> Spesialisasi
+        </div>
+        </div>
         <p>&copy; {{ date('Y') }} Medan HealthSeek. All Rights Reserved.</p>
     </footer>
 
