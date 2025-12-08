@@ -1,0 +1,205 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Container utama */
+.container {
+    width: 100%;
+    max-width: 1000px; /* lebar maksimal container */
+    margin: 0 auto;
+     padding: 90px 20px 80px 20px; /* tambah padding-bottom untuk space ke footer */
+    flex: 1;
+    box-sizing: border-box;
+}
+
+/* FOOTER FULL WIDTH & STAY BOTTOM */
+footer {
+    background: var(--primary, #198754);
+    color: var(--light, #fff);
+    text-align: center;
+    padding: 0.1rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    width: 100vw;
+    flex-shrink: 0;
+}
+
+/* FONT GLOBAL */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+* {
+    font-family: 'Google Sans', sans-serif;
+}
+
+/* Judul Pencarian */
+.judul-terdekat {
+    display: block;          /* pastikan tampil */
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+    margin: 25px 0 20px 0;  /* margin atas dan bawah */
+    color: #198754;
+    position: relative;      /* tidak tertimpa map */
+    z-index: 10;
+}
+
+/* Map box */
+.map-container {
+    width: 100%;
+    height: 260px; /* sesuai awal */
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px auto;
+    background: #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Tombol cari RS */
+.btn-cari-rs {
+    display: block;
+    margin: 15px auto;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    background-color: #198754;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+.btn-cari-rs:hover {
+    background-color: #157347;
+}
+
+/* Judul list RS */
+.judul-list {
+    display: block;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    color: #198754;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* List RS */
+.rs-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 50px; /* space bawah untuk footer */
+}
+
+/* Item RS */
+/* Item RS */
+.rs-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 14px 16px;
+    border-radius: 10px;
+}
+
+/* Baris utama */
+.rs-row {
+    display: flex;
+     align-items: center;
+    width: 100%;
+}
+
+/* Nama RS kiri, bisa panjang */
+.rs-nama {
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;                  /* ambil ruang kiri */
+    min-width: 160px;
+    line-height: 1.25;
+}
+
+/* ROW kanan: tipe, telp, jarak, detail */
+.rs-right {
+    display: grid;
+    grid-template-columns: 160px 110px 90px auto; /* atur lebar kolom */
+    align-items: center;
+    column-gap: 20px; /* jarak antar kolom */
+}
+
+
+.rs-detail-wrapper {
+    margin-left: auto; /* KUNCI agar tombol menempel kanan */
+}
+
+/* Info RS kanan */
+.rs-tipe {
+    color: #198754 !important;  /* FIX warna balik semula */
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.rs-telp,
+.rs-jarak {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+
+}
+
+/* Tombol detail paling kanan otomatis */
+.btn-detail {
+    padding: 6px 14px;
+    font-size: 14px;
+    border: none;
+    background-color: #198754;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+.btn-detail:hover {
+    background-color: #157347;
+}
+
+/* Responsif */
+@media screen and (max-width: 600px) {
+    .rs-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .rs-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .btn-detail {
+        align-self: flex-end;
+    }
+}
+
+.radius-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 5px 0;
+    font-size: 15px;
+}
+
+.radius-input-container input {
+    width: 80px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
